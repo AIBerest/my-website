@@ -1,0 +1,10 @@
+---
+description: In every project, always add a README.md
+alwaysApply: true
+---
+
+# README in every project
+
+- For any new or existing project in this workspace, **always create or update a README.md** if it is missing.
+- README should briefly describe the project, how to run it, and (if relevant) stack or structure.
+- Commit and push README.md together with the rest of the project when pushing to a repo.
