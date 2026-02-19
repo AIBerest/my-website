@@ -1,0 +1,30 @@
+# Secrets and env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+credentials/
+*secret*
+*credentials*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs and temp
+*.log
+tmp/
+temp/
+.cache/
+
+# Dependencies (if you add npm later)
+node_modules/

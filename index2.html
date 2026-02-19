@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Evgeniy Berestenko — crypto, vibecoding & building the next vibe.">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>Evgeniy Berestenko</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: #e5e5e5;
+      background: #0a0a0a;
+      background:
+        radial-gradient(ellipse 90% 60% at 15% 15%, rgba(0, 255, 240, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 85% 85%, rgba(0, 184, 170, 0.1) 0%, transparent 55%),
+        radial-gradient(ellipse 120% 70% at 50% 100%, rgba(0, 255, 240, 0.06) 0%, transparent 50%),
+        linear-gradient(165deg, #0a0a0a 0%, #0c0e12 20%, #0f1318 40%, #121212 60%, #0d1014 80%, #0a0a0a 100%);
+      -webkit-font-smoothing: antialiased;
+    }
+    .page { max-width: 56rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
+    /* Logo */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .lang-toggle-wrap {
+      position: relative;
+      display: inline-flex;
+      padding: 4px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      animation: fadeIn 0.6s ease-out 0.2s forwards;
+      opacity: 0;
+    }
+    .lang-toggle {
+      display: flex;
+      position: relative;
+      z-index: 1;
+      border-radius: 9999px;
+    }
+    .lang-toggle button {
+      padding: 0.4rem 0.9rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.5);
+      background: none;
+      border: none;
+      border-radius: 9999px;
+      cursor: pointer;
+      transition: color 0.25s;
+      font-family: inherit;
+    }
+    .lang-toggle button:hover { color: rgba(255, 255, 255, 0.9); }
+    .lang-toggle button.active { color: #0a0a0a; }
+    .lang-toggle-slider {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: calc(50% - 6px);
+      height: calc(100% - 8px);
+      background: linear-gradient(135deg, #00FFF0, #00B8AA);
+      border-radius: 9999px;
+      transition: left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 0;
+    }
+    .lang-toggle-wrap[data-lang="en"] .lang-toggle-slider { left: 4px; }
+    .lang-toggle-wrap[data-lang="ru"] .lang-toggle-slider { left: calc(50% + 2px); }
+    .logo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: inherit;
+      animation: fadeIn 0.6s ease-out 0.1s forwards;
+      opacity: 0;
+    }
+    .logo-icon {
+      width: 2.25rem;
+      height: 2.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, #00FFF0, #00B8AA);
+      color: #0a0a0a;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+    .logo-text {
+      font-size: 1.125rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #00FFF0, #00B8AA);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    /* Hero */
+    .hero {
+      padding-top: 6rem;
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+    @media (min-width: 768px) {
+      .hero { flex-direction: row; align-items: center; gap: 3rem; }
+    }
+    .hero-avatar-wrap {
+      flex-shrink: 0;
+      animation: fadeIn 0.6s ease-out 0.2s forwards;
+      opacity: 0;
+    }
+    .hero-avatar {
+      width: 10rem;
+      height: 10rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(0, 184, 170, 0.3);
+      box-shadow: 0 0 30px rgba(0, 255, 240, 0.25);
+    }
+    .hero-avatar:hover { box-shadow: 0 0 40px rgba(0, 255, 240, 0.4); }
+    @media (min-width: 768px) {
+      .hero-avatar { width: 13rem; height: 13rem; }
+    }
+    .hero-content {
+      animation: fadeInUp 0.6s ease-out 0.35s forwards;
+      opacity: 0;
+    }
+    .hero h1 {
+      margin: 0 0 0.5rem;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    @media (min-width: 768px) {
+      .hero h1 { font-size: 3rem; }
+    }
+    .hero-tagline {
+      margin: 0 0 1rem;
+      font-size: 1.25rem;
+      color: #9ca3af;
+      max-width: 28rem;
+    }
+    .hero-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .hero-social a {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 50%;
+      background: #121212;
+      border: 1px solid #1a1a1a;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .hero-social a:hover {
+      color: #00FFF0;
+      border-color: rgba(0, 255, 240, 0.5);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.4);
+    }
+    /* Sections — modern studio style + reveal animation */
+    .section { padding: 5rem 0; }
+    .section.enter {
+      opacity: 0;
+      transform: translateY(40px) scale(0.98);
+    }
+    .section.enter.visible {
+      animation: sectionReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .section.enter .section-label,
+    .section.enter .section-title,
+    .section.enter .about-text,
+    .section.enter .contact-lead,
+    .section.enter .contact-buttons,
+    .section.enter .project-item,
+    .section.enter .project-card,
+    .section.enter .skill-card {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .section.enter.visible .section-label {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+    }
+    .section.enter.visible .section-title {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.28s forwards;
+    }
+    .section.enter.visible .about-text {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards;
+    }
+    .section.enter.visible .contact-lead {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+    }
+    .section.enter.visible .contact-buttons {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+    .section.enter.visible .project-card:nth-child(1) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+    }
+    .section.enter.visible .project-card:nth-child(2) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.38s forwards;
+    }
+    .section.enter.visible .project-card:nth-child(3) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.51s forwards;
+    }
+    .section.enter.visible .project-card:nth-child(4) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.64s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(1) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(2) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(3) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(4) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(5) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(6) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
+    }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #00B8AA;
+      margin: 0 0 0.75rem;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      margin: 0 0 2.5rem;
+      color: #fff;
+    }
+    @media (min-width: 768px) {
+      .section-title { font-size: 2.5rem; margin-bottom: 3rem; }
+    }
+    /* About — typography-led, no heavy card */
+    .about-text {
+      max-width: 38rem;
+      margin: 0;
+      font-size: 1.125rem;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 400;
+    }
+    .about-text strong { color: rgba(255, 255, 255, 0.9); font-weight: 500; }
+    /* Skills — cards grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) {
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .skills-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .skill-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 0 24px rgba(0, 255, 240, 0.08);
+    }
+    .skill-card-emoji {
+      display: inline-block;
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      line-height: 1;
+    }
+    .skill-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .skill-card-desc {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    /* Projects — cards grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    @media (min-width: 640px) {
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .project-card {
+      display: block;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      overflow: hidden;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    }
+    .project-card:hover {
+      border-color: rgba(0, 255, 240, 0.25);
+      box-shadow: 0 0 32px rgba(0, 255, 240, 0.08);
+      transform: translateY(-2px);
+    }
+    .project-card-image {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .project-card-image i { filter: drop-shadow(0 0 12px rgba(0, 255, 240, 0.3)); }
+    .project-card-image.img-1 { background: linear-gradient(135deg, rgba(0, 255, 240, 0.2) 0%, rgba(0, 184, 170, 0.15) 100%); }
+    .project-card-image.img-2 { background: linear-gradient(135deg, rgba(0, 184, 170, 0.2) 0%, rgba(0, 120, 200, 0.12) 100%); }
+    .project-card-image.img-3 { background: linear-gradient(135deg, rgba(100, 80, 255, 0.18) 0%, rgba(0, 255, 240, 0.1) 100%); }
+    .project-card-image.img-4 { background: linear-gradient(135deg, rgba(255, 180, 0, 0.12) 0%, rgba(0, 255, 240, 0.08) 100%); }
+    .project-card-body { padding: 1.25rem; }
+    .project-card h3 {
+      margin: 0 0 0.35rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: #fff;
+      transition: color 0.25s ease;
+    }
+    .project-card:hover h3 { color: #00FFF0; }
+    .project-card-desc {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    /* Contacts — clean, spacious */
+    .contact-lead {
+      margin: 0 0 2rem;
+      font-size: 1.125rem;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+    }
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .contact-buttons a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    }
+    .contact-buttons a:hover {
+      color: #00FFF0;
+      border-color: rgba(0, 255, 240, 0.35);
+      background: rgba(0, 255, 240, 0.06);
+      box-shadow: 0 0 24px rgba(0, 255, 240, 0.12);
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes sectionReveal {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    @keyframes itemReveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="#" class="logo-link">
+      <span class="logo-icon">EB</span>
+      <span class="logo-text">Evgeniy B.</span>
+    </a>
+    <div class="lang-toggle-wrap" data-lang="en" aria-label="Language">
+      <div class="lang-toggle">
+        <span class="lang-toggle-slider"></span>
+        <button type="button" class="lang-option active" data-lang="en">En</button>
+        <button type="button" class="lang-option" data-lang="ru">Ru</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" id="hero">
+      <div class="hero-avatar-wrap">
+        <img src="./assets/avatar.png" alt="Evgeniy Berestenko" class="hero-avatar">
+      </div>
+      <div class="hero-content">
+        <h1>Evgeniy Berestenko</h1>
+        <p class="hero-tagline" data-i18n="tagline">Crypto, vibecoding & building the next vibe.</p>
+        <div class="hero-social">
+          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section enter" id="about">
+      <p class="section-label" data-i18n="aboutLabel">About</p>
+      <h2 class="section-title" data-i18n="aboutTitle">A bit about me</h2>
+      <p class="about-text" data-i18n-html="aboutText">Crypto veteran, in crypto since 2017. Into vibecoding; I build vibe and AI solutions that save time and money.</p>
+    </section>
+
+    <section class="section enter" id="skills">
+      <p class="section-label" data-i18n="skillsLabel">Skills</p>
+      <h2 class="section-title" data-i18n="skillsTitle">My skills</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🪙</span>
+          <h3 data-i18n="skill1Title">Crypto</h3>
+          <p class="skill-card-desc" data-i18n="skill1Desc">Since 2017: DeFi, tokens, and community growth.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🤖</span>
+          <h3 data-i18n="skill2Title">AI & ML</h3>
+          <p class="skill-card-desc" data-i18n="skill2Desc">Agents, automation, and practical integrations.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">⚡</span>
+          <h3 data-i18n="skill3Title">Vibecoding</h3>
+          <p class="skill-card-desc" data-i18n="skill3Desc">Fast prototypes, frontend polish, and product vibe.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🔧</span>
+          <h3 data-i18n="skill4Title">Automation</h3>
+          <p class="skill-card-desc" data-i18n="skill4Desc">No-code workflows, scripts, and service orchestration.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🛠</span>
+          <h3 data-i18n="skill5Title">Dev tools</h3>
+          <p class="skill-card-desc" data-i18n="skill5Desc">CLI utilities, parsers, deployment helpers.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">👥</span>
+          <h3 data-i18n="skill6Title">Community</h3>
+          <p class="skill-card-desc" data-i18n="skill6Desc">Replay community support, moderation, and user focus.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section enter" id="projects">
+      <p class="section-label" data-i18n="workLabel">Work</p>
+      <h2 class="section-title" data-i18n="projectsTitle">Projects</h2>
+      <div class="projects-grid">
+        <a href="#" class="project-card">
+          <div class="project-card-image img-1"><i class="fas fa-robot" aria-hidden="true"></i></div>
+          <div class="project-card-body">
+            <h3 data-i18n="project1Title">AI Agent for Replay</h3>
+            <p class="project-card-desc" data-i18n="project1Desc">AI agent for the Replay community: automation and smart replies that save time for moderators and members.</p>
+          </div>
+        </a>
+        <a href="#" class="project-card">
+          <div class="project-card-image img-2"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
+          <div class="project-card-body">
+            <h3 data-i18n="project2Title">СудьбаПро.AI</h3>
+            <p class="project-card-desc" data-i18n="project2Desc">AI-powered tool for fate and life-path insights. Combines tradition with modern ML for personalized readings.</p>
+          </div>
+        </a>
+        <a href="#" class="project-card">
+          <div class="project-card-image img-3"><i class="fas fa-bolt" aria-hidden="true"></i></div>
+          <div class="project-card-body">
+            <h3 data-i18n="project3Title">Vibe Automations</h3>
+            <p class="project-card-desc" data-i18n="project3Desc">No-code style automations and integrations that connect your tools and cut repetitive work in half.</p>
+          </div>
+        </a>
+        <a href="#" class="project-card">
+          <div class="project-card-image img-4"><i class="fas fa-code" aria-hidden="true"></i></div>
+          <div class="project-card-body">
+            <h3 data-i18n="project4Title">Dev Tools & Scripts</h3>
+            <p class="project-card-desc" data-i18n="project4Desc">Small utilities and scripts for developers: deploy helpers, parsers, and CLI tools that speed up daily workflow.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="section enter" id="contacts">
+      <p class="section-label" data-i18n="contactsLabel">Get in touch</p>
+      <h2 class="section-title" data-i18n="contactsTitle">Contacts</h2>
+      <p class="contact-lead" data-i18n="contactLead">Reach me on socials — drop a message anytime.</p>
+      <div class="contact-buttons">
+        <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
+        <a href="#"><i class="fab fa-telegram-plane"></i> Telegram</a>
+        <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function() {
+      var translations = {
+        en: {
+          tagline: 'Crypto, vibecoding & building the next vibe.',
+          aboutLabel: 'About',
+          aboutTitle: 'A bit about me',
+          aboutText: 'Crypto veteran, in crypto since 2017. Into vibecoding; I build <strong>vibe and AI solutions</strong> that save time and money.',
+          skillsLabel: 'Skills',
+          skillsTitle: 'My skills',
+          skill1Title: 'Crypto',
+          skill1Desc: 'Since 2017: DeFi, tokens, and community growth.',
+          skill2Title: 'AI & ML',
+          skill2Desc: 'Agents, automation, and practical integrations.',
+          skill3Title: 'Vibecoding',
+          skill3Desc: 'Fast prototypes, frontend polish, and product vibe.',
+          skill4Title: 'Automation',
+          skill4Desc: 'No-code workflows, scripts, and service orchestration.',
+          skill5Title: 'Dev tools',
+          skill5Desc: 'CLI utilities, parsers, deployment helpers.',
+          skill6Title: 'Community',
+          skill6Desc: 'Replay community support, moderation, and user focus.',
+          workLabel: 'Work',
+          projectsTitle: 'Projects',
+          project1Title: 'AI Agent for Replay',
+          project1Desc: 'AI agent for the Replay community: automation and smart replies that save time for moderators and members.',
+          project2Title: 'СудьбаПро.AI',
+          project2Desc: 'AI-powered tool for fate and life-path insights. Combines tradition with modern ML for personalized readings.',
+          project3Title: 'Vibe Automations',
+          project3Desc: 'No-code style automations and integrations that connect your tools and cut repetitive work in half.',
+          project4Title: 'Dev Tools & Scripts',
+          project4Desc: 'Small utilities and scripts for developers: deploy helpers, parsers, and CLI tools that speed up daily workflow.',
+          contactsLabel: 'Get in touch',
+          contactsTitle: 'Contacts',
+          contactLead: 'Reach me on socials — drop a message anytime.'
+        },
+        ru: {
+          tagline: 'Крипто, вайб-кодинг и создание следующего вайба.',
+          aboutLabel: 'Обо мне',
+          aboutTitle: 'Немного обо мне',
+          aboutText: 'Криптоветеран, в крипте с 2017. Увлекаюсь вайбкодингом, создаю <strong>вайб и AI‑решения</strong>, которые экономят деньги и время.',
+          skillsLabel: 'Навыки',
+          skillsTitle: 'Мои навыки',
+          skill1Title: 'Крипто',
+          skill1Desc: 'Опыт с 2017: DeFi, токены и развитие комьюнити.',
+          skill2Title: 'AI и ML',
+          skill2Desc: 'Агенты, автоматизация и практичные интеграции.',
+          skill3Title: 'Вайбкодинг',
+          skill3Desc: 'Быстрые прототипы, аккуратный фронт и продуктовый вайб.',
+          skill4Title: 'Автоматизация',
+          skill4Desc: 'No-code сценарии, скрипты и связка сервисов.',
+          skill5Title: 'Инструменты',
+          skill5Desc: 'CLI-утилиты, парсеры и помощники для деплоя.',
+          skill6Title: 'Комьюнити',
+          skill6Desc: 'Поддержка сообщества Replay, модерация и фокус на людях.',
+          workLabel: 'Работы',
+          projectsTitle: 'Проекты',
+          project1Title: 'AI-агент для Replay',
+          project1Desc: 'AI-агент для сообщества Replay: автоматизация и умные ответы, экономящие время модераторам и участникам.',
+          project2Title: 'СудьбаПро.AI',
+          project2Desc: 'AI-инструмент для инсайтов по судьбе и жизненному пути. Сочетает традиции с современным ML для персональных раскладов.',
+          project3Title: 'Vibe Automations',
+          project3Desc: 'Автоматизации и интеграции в стиле no-code: связывают ваши инструменты и сокращают рутину вдвое.',
+          project4Title: 'Dev Tools & Scripts',
+          project4Desc: 'Утилиты и скрипты для разработчиков: хелперы деплоя, парсеры и CLI, ускоряющие ежедневную работу.',
+          contactsLabel: 'Связаться',
+          contactsTitle: 'Контакты',
+          contactLead: 'Пишите в соцсети — отвечу в любое время.'
+        }
+      };
+
+      function getLang() {
+        var saved = localStorage.getItem('site-lang');
+        return (saved === 'ru' || saved === 'en') ? saved : 'en';
+      }
+
+      function setLang(lang) {
+        localStorage.setItem('site-lang', lang);
+        document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+        var meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.content = lang === 'ru'
+          ? 'Евгений Берестенко — крипто, вайб-кодинг и создание следующего вайба.'
+          : 'Evgeniy Berestenko — crypto, vibecoding & building the next vibe.';
+
+        var t = translations[lang];
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n');
+          if (t[key]) el.textContent = t[key];
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n-html');
+          if (t[key]) el.innerHTML = t[key];
+        });
+
+        document.querySelectorAll('.lang-option').forEach(function(btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
+        var wrap = document.querySelector('.lang-toggle-wrap');
+        if (wrap) wrap.setAttribute('data-lang', lang);
+      }
+
+      document.querySelectorAll('.lang-option').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          setLang(btn.getAttribute('data-lang'));
+        });
+      });
+
+      setLang(getLang());
+
+      var sections = document.querySelectorAll('.section.enter');
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      sections.forEach(function(s) { observer.observe(s); });
+    })();
+  </script>
+</body>
+</html>
