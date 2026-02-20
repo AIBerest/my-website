@@ -4,27 +4,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Evgeniy Berestenko - crypto, vibecoding & building the next vibe.">
-  <meta name="theme-color" content="#0a0a0a">
+  <meta name="theme-color" content="#0a0a0a" id="meta-theme-color">
   <title>Evgeniy Berestenko</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('site-theme');
+      var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      var meta = document.getElementById('meta-theme-color');
+      if (meta) meta.content = theme === 'light' ? '#f5f5f5' : '#0a0a0a';
+    })();
+  </script>
   <style>
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    :root {
+      --bg: #0a0a0a;
+      --bg-gradient: radial-gradient(ellipse 90% 60% at 15% 15%, rgba(0, 255, 240, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 85% 85%, rgba(0, 184, 170, 0.1) 0%, transparent 55%),
+        radial-gradient(ellipse 120% 70% at 50% 100%, rgba(0, 255, 240, 0.06) 0%, transparent 50%),
+        linear-gradient(165deg, #0a0a0a 0%, #0c0e12 20%, #0f1318 40%, #121212 60%, #0d1014 80%, #0a0a0a 100%);
+      --text: #e5e5e5;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #00FFF0;
+      --accent-dim: #00B8AA;
+      --input-bg: rgba(255, 255, 255, 0.04);
+      --input-border: rgba(255, 255, 255, 0.12);
+    }
+    [data-theme="light"] {
+      --bg: #f5f5f5;
+      --bg-gradient: radial-gradient(ellipse 90% 60% at 15% 15%, rgba(0, 184, 170, 0.15) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 85% 85%, rgba(0, 255, 240, 0.1) 0%, transparent 55%),
+        linear-gradient(165deg, #f8fafc 0%, #f1f5f9 30%, #e2e8f0 60%, #f1f5f9 100%);
+      --text: #1a1a1a;
+      --text-muted: #64748b;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --accent: #0d9488;
+      --accent-dim: #0f766e;
+      --input-bg: #fff;
+      --input-border: rgba(0, 0, 0, 0.15);
+    }
     body {
       margin: 0;
       min-height: 100vh;
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
-      color: #e5e5e5;
-      background: #0a0a0a;
-      background:
-        radial-gradient(ellipse 90% 60% at 15% 15%, rgba(0, 255, 240, 0.12) 0%, transparent 55%),
-        radial-gradient(ellipse 70% 50% at 85% 85%, rgba(0, 184, 170, 0.1) 0%, transparent 55%),
-        radial-gradient(ellipse 120% 70% at 50% 100%, rgba(0, 255, 240, 0.06) 0%, transparent 50%),
-        linear-gradient(165deg, #0a0a0a 0%, #0c0e12 20%, #0f1318 40%, #121212 60%, #0d1014 80%, #0a0a0a 100%);
+      color: var(--text);
+      background: var(--bg);
+      background: var(--bg-gradient);
       -webkit-font-smoothing: antialiased;
+      transition: background 0.4s ease, color 0.3s ease;
     }
     .page { max-width: 56rem; margin: 0 auto; padding: 0 1.5rem 5rem; }
     /* Logo */
@@ -44,6 +79,28 @@
       animation: fadeIn 0.6s ease-out 0.2s forwards;
       opacity: 0;
     }
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .theme-toggle {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
+    [data-theme="light"] .theme-toggle { border-color: rgba(0, 0, 0, 0.1); background: rgba(0, 0, 0, 0.05); }
+    [data-theme="light"] .theme-toggle:hover { background: rgba(0, 0, 0, 0.08); }
+    .theme-toggle svg { width: 1.1rem; height: 1.1rem; }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    [data-theme="light"] .theme-toggle .icon-sun { display: block; }
+    [data-theme="light"] .theme-toggle .icon-moon { display: none; }
     .lang-current {
       display: inline-flex;
       align-items: center;
@@ -51,17 +108,17 @@
       padding: 0.4rem 0.75rem;
       font-size: 0.8125rem;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.85);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 8px;
       cursor: pointer;
       font-family: inherit;
       transition: border-color 0.2s, background 0.2s;
     }
     .lang-current:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.18);
+      background: var(--input-bg);
+      border-color: var(--input-border);
     }
     .lang-current::after {
       content: '';
@@ -69,7 +126,7 @@
       height: 0;
       border-left: 4px solid transparent;
       border-right: 4px solid transparent;
-      border-top: 5px solid rgba(255, 255, 255, 0.5);
+      border-top: 5px solid var(--text-muted);
       margin-left: 2px;
     }
     .lang-dropdown.open .lang-current::after { transform: scaleY(-1); }
@@ -79,10 +136,10 @@
       right: 0;
       min-width: 100%;
       padding: 4px;
-      background: rgba(18, 18, 18, 0.98);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
       opacity: 0;
       visibility: hidden;
       transform: translateY(-4px);
@@ -100,7 +157,7 @@
       padding: 0.5rem 0.85rem;
       font-size: 0.8125rem;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--text);
       background: none;
       border: none;
       border-radius: 6px;
@@ -111,10 +168,10 @@
     }
     .lang-menu button:hover {
       background: rgba(0, 255, 240, 0.1);
-      color: #00FFF0;
+      color: var(--accent);
     }
     .lang-menu button.lang-option.active {
-      color: #00FFF0;
+      color: var(--accent);
       background: rgba(0, 255, 240, 0.08);
     }
     .logo-link {
@@ -133,7 +190,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 0.5rem;
-      background: linear-gradient(135deg, #00FFF0, #00B8AA);
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
       color: #0a0a0a;
       font-weight: 700;
       font-size: 0.875rem;
@@ -142,7 +199,7 @@
       font-size: 1.125rem;
       font-weight: 700;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #00FFF0, #00B8AA);
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -184,7 +241,7 @@
       margin: 0 0 0.5rem;
       font-size: 2.25rem;
       font-weight: 700;
-      color: #fff;
+      color: var(--text);
     }
     @media (min-width: 768px) {
       .hero h1 { font-size: 3rem; }
@@ -192,7 +249,7 @@
     .hero-tagline {
       margin: 0 0 1rem;
       font-size: 1.25rem;
-      color: #9ca3af;
+      color: var(--text-muted);
       max-width: 28rem;
     }
     .hero-cta {
@@ -204,7 +261,7 @@
       border-radius: 100px;
       background: rgba(0, 255, 240, 0.1);
       border: 1px solid rgba(0, 255, 240, 0.4);
-      color: #00FFF0;
+      color: var(--accent);
       text-decoration: none;
       font-size: 0.9375rem;
       font-weight: 500;
@@ -224,9 +281,9 @@
       width: 2.75rem;
       height: 2.75rem;
       border-radius: 50%;
-      background: #121212;
-      border: 1px solid #1a1a1a;
-      color: #9ca3af;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -234,7 +291,7 @@
       transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
     .hero-social a:hover {
-      color: #00FFF0;
+      color: var(--accent);
       border-color: rgba(0, 255, 240, 0.5);
       box-shadow: 0 0 20px rgba(0, 255, 240, 0.4);
     }
@@ -253,6 +310,8 @@
     .section.enter .contact-lead,
     .section.enter .contact-telegram-block,
     .section.enter .contact-buttons,
+    .section.enter .contact-form-wrap,
+    .section.enter .visitor-count,
     .section.enter .project-item,
     .section.enter .project-card,
     .section.enter .skill-card {
@@ -276,6 +335,12 @@
     }
     .section.enter.visible .contact-buttons {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+    .section.enter.visible .contact-form-wrap {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.58s forwards;
+    }
+    .section.enter.visible .visitor-count {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.66s forwards;
     }
     .section.enter.visible .project-card:nth-child(1) {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
@@ -312,7 +377,7 @@
       font-weight: 500;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: #00B8AA;
+      color: var(--accent-dim);
       margin: 0 0 0.75rem;
     }
     .section-title {
@@ -320,7 +385,7 @@
       font-weight: 600;
       letter-spacing: -0.03em;
       margin: 0 0 2.5rem;
-      color: #fff;
+      color: var(--text);
     }
     @media (min-width: 768px) {
       .section-title { font-size: 2.5rem; margin-bottom: 3rem; }
@@ -331,10 +396,11 @@
       margin: 0;
       font-size: 1.125rem;
       line-height: 1.75;
-      color: rgba(255, 255, 255, 0.75);
+      color: var(--text);
       font-weight: 400;
+      opacity: 0.9;
     }
-    .about-text strong { color: rgba(255, 255, 255, 0.9); font-weight: 500; }
+    .about-text strong { font-weight: 500; }
     /* Skills - cards grid */
     .skills-grid {
       display: grid;
@@ -348,8 +414,8 @@
       .skills-grid { grid-template-columns: repeat(3, 1fr); }
     }
     .skill-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 1rem;
       padding: 1.25rem;
       transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -368,13 +434,13 @@
       margin: 0 0 0.5rem;
       font-size: 1.125rem;
       font-weight: 600;
-      color: #fff;
+      color: var(--text);
     }
     .skill-card-desc {
       margin: 0;
       font-size: 0.875rem;
       line-height: 1.5;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-muted);
     }
     /* Projects - cards grid */
     .projects-grid {
@@ -388,8 +454,8 @@
     .project-card {
       display: block;
       text-decoration: none;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
       border-radius: 1rem;
       overflow: hidden;
       transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
@@ -418,15 +484,15 @@
       font-size: 1.125rem;
       font-weight: 600;
       letter-spacing: -0.02em;
-      color: #fff;
+      color: var(--text);
       transition: color 0.25s ease;
     }
-    .project-card:hover h3 { color: #00FFF0; }
+    .project-card:hover h3 { color: var(--accent); }
     .project-card-desc {
       margin: 0;
       font-size: 0.875rem;
       line-height: 1.5;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-muted);
     }
     .project-card-placeholder {
       cursor: default;
@@ -437,7 +503,7 @@
     .contact-lead {
       margin: 0 0 1rem;
       font-size: 1.125rem;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--text-muted);
       line-height: 1.6;
     }
     .contact-telegram-block {
@@ -455,7 +521,7 @@
       border-radius: 100px;
       background: rgba(0, 255, 240, 0.1);
       border: 1px solid rgba(0, 255, 240, 0.35);
-      color: #00FFF0;
+      color: var(--accent);
       text-decoration: none;
       font-size: 0.9375rem;
       font-weight: 500;
@@ -481,20 +547,90 @@
       gap: 0.5rem;
       padding: 0.75rem 1.5rem;
       border-radius: 100px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: rgba(255, 255, 255, 0.85);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text);
       text-decoration: none;
       font-size: 0.9375rem;
       font-weight: 500;
       transition: color 0.25s, border-color 0.25s, background 0.25s, box-shadow 0.25s;
     }
     .contact-buttons a:hover {
-      color: #00FFF0;
+      color: var(--accent);
       border-color: rgba(0, 255, 240, 0.35);
       background: rgba(0, 255, 240, 0.06);
       box-shadow: 0 0 24px rgba(0, 255, 240, 0.12);
     }
+    /* Contact form */
+    .contact-form-wrap {
+      margin-top: 2.5rem;
+      max-width: 28rem;
+    }
+    .contact-form-wrap .form-row { margin-bottom: 1rem; }
+    .contact-form-wrap label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .contact-form-wrap input,
+    .contact-form-wrap textarea {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .contact-form-wrap input:focus,
+    .contact-form-wrap textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 255, 240, 0.15);
+    }
+    .contact-form-wrap input.error,
+    .contact-form-wrap textarea.error {
+      border-color: #dc2626;
+    }
+    .contact-form-wrap textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .contact-form-wrap .form-error {
+      font-size: 0.8125rem;
+      color: #dc2626;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .contact-form-wrap button[type="submit"] {
+      margin-top: 0.5rem;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      font-family: inherit;
+      color: #0a0a0a;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .contact-form-wrap button[type="submit"]:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .visitor-count {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+    .visitor-count span { font-weight: 500; color: var(--accent); }
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -531,12 +667,18 @@
       <span class="logo-icon">EB</span>
       <span class="logo-text">Evgeniy B.</span>
     </a>
-    <div class="lang-dropdown" aria-label="Language">
-      <button type="button" class="lang-current" id="lang-current" aria-haspopup="true" aria-expanded="false">En</button>
-      <div class="lang-menu" id="lang-menu" role="menu">
-        <button type="button" role="menuitem" data-lang="en" class="lang-option">En</button>
-        <button type="button" role="menuitem" data-lang="es" class="lang-option">Es</button>
-        <button type="button" role="menuitem" data-lang="ru" class="lang-option">Ru</button>
+    <div class="header-actions">
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="icon-sun" aria-hidden="true"><i class="fas fa-sun"></i></span>
+        <span class="icon-moon" aria-hidden="true"><i class="fas fa-moon"></i></span>
+      </button>
+      <div class="lang-dropdown" aria-label="Language">
+        <button type="button" class="lang-current" id="lang-current" aria-haspopup="true" aria-expanded="false">En</button>
+        <div class="lang-menu" id="lang-menu" role="menu">
+          <button type="button" role="menuitem" data-lang="en" class="lang-option">En</button>
+          <button type="button" role="menuitem" data-lang="es" class="lang-option">Es</button>
+          <button type="button" role="menuitem" data-lang="ru" class="lang-option">Ru</button>
+        </div>
       </div>
     </div>
   </header>
@@ -648,6 +790,28 @@
         <a href="https://t.me/E_Berest" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> Telegram</a>
         <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
       </div>
+      <div class="contact-form-wrap">
+        <h3 class="form-title" data-i18n="formTitle" style="font-size:1.125rem; margin:0 0 1rem; color: var(--text);">Write to me</h3>
+        <form id="contact-form" novalidate>
+          <div class="form-row">
+            <label for="form-name" data-i18n="formName">Name</label>
+            <input type="text" id="form-name" name="name" autocomplete="name" data-i18n-placeholder="formNamePlaceholder" placeholder="Your name" />
+            <span class="form-error" id="form-name-error" aria-live="polite"></span>
+          </div>
+          <div class="form-row">
+            <label for="form-email" data-i18n="formEmail">Email</label>
+            <input type="email" id="form-email" name="email" autocomplete="email" data-i18n-placeholder="formEmailPlaceholder" placeholder="your@email.com" />
+            <span class="form-error" id="form-email-error" aria-live="polite"></span>
+          </div>
+          <div class="form-row">
+            <label for="form-message" data-i18n="formMessage">Message</label>
+            <textarea id="form-message" name="message" data-i18n-placeholder="formMessagePlaceholder" placeholder="Your message..." rows="5"></textarea>
+            <span class="form-error" id="form-message-error" aria-live="polite"></span>
+          </div>
+          <button type="submit" data-i18n="formSubmit">Send</button>
+        </form>
+      </div>
+      <p class="visitor-count" id="visitor-count" aria-live="polite"></p>
     </section>
   </main>
 
@@ -687,7 +851,20 @@
           contactsLabel: 'Get in touch',
           contactsTitle: 'Contacts',
           contactLead: 'Open to collaboration: crypto projects, AI products, process automation, and consulting.',
-          contactTelegramTagline: 'Write on Telegram - I reply to the point, no fluff.'
+          contactTelegramTagline: 'Write on Telegram - I reply to the point, no fluff.',
+          formTitle: 'Write to me',
+          formName: 'Name',
+          formNamePlaceholder: 'Your name',
+          formEmail: 'Email',
+          formEmailPlaceholder: 'your@email.com',
+          formMessage: 'Message',
+          formMessagePlaceholder: 'Your message...',
+          formSubmit: 'Send',
+          formSuccess: 'Message sent (demo). We will get in touch soon!',
+          formErrorEmail: 'Please enter a valid email address.',
+          formErrorRequired: 'This field is required.',
+          visitorText: 'You are the',
+          visitorSuffix: 'visitor'
         },
         es: {
           tagline: 'En crypto desde 2017. Desde 2025: vibecoding, agentes, automatización - menos ruido, más resultado.',
@@ -722,7 +899,20 @@
           contactsLabel: 'Contacto',
           contactsTitle: 'Contactos',
           contactLead: 'Abierto a colaboración: proyectos crypto, productos AI, automatización de procesos y consultoría.',
-          contactTelegramTagline: 'Escribe por Telegram - respondo al grano, sin relleno.'
+          contactTelegramTagline: 'Escribe por Telegram - respondo al grano, sin relleno.',
+          formTitle: 'Escríbeme',
+          formName: 'Nombre',
+          formNamePlaceholder: 'Tu nombre',
+          formEmail: 'Email',
+          formEmailPlaceholder: 'tu@email.com',
+          formMessage: 'Mensaje',
+          formMessagePlaceholder: 'Tu mensaje...',
+          formSubmit: 'Enviar',
+          formSuccess: 'Mensaje enviado (demo). ¡Nos pondremos en contacto pronto!',
+          formErrorEmail: 'Introduce un email válido.',
+          formErrorRequired: 'Este campo es obligatorio.',
+          visitorText: 'Eres el',
+          visitorSuffix: 'visitante'
         },
         ru: {
           tagline: 'С 2017 в крипте. С 2025: vibecoding, агенты, автоматизация - меньше шума, больше результата.',
@@ -757,7 +947,20 @@
           contactsLabel: 'Связаться',
           contactsTitle: 'Контакты',
           contactLead: 'Открыт к сотрудничеству: криптопроекты, AI‑продукты, автоматизация процессов и консалтинг.',
-          contactTelegramTagline: 'Пишите в Telegram - отвечаю по делу и без воды.'
+          contactTelegramTagline: 'Пишите в Telegram - отвечаю по делу и без воды.',
+          formTitle: 'Написать мне',
+          formName: 'Имя',
+          formNamePlaceholder: 'Ваше имя',
+          formEmail: 'Почта',
+          formEmailPlaceholder: 'your@email.com',
+          formMessage: 'Текст сообщения',
+          formMessagePlaceholder: 'Ваше сообщение...',
+          formSubmit: 'Отправить',
+          formSuccess: 'Сообщение отправлено (демо). Скоро свяжемся!',
+          formErrorEmail: 'Введите корректный email.',
+          formErrorRequired: 'Заполните это поле.',
+          visitorText: 'Вы',
+          visitorSuffix: 'посетитель'
         }
       };
 
@@ -787,6 +990,10 @@
           var key = el.getAttribute('data-i18n-html');
           if (t[key]) el.innerHTML = t[key];
         });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n-placeholder');
+          if (t[key]) el.placeholder = t[key];
+        });
 
         var currentBtn = document.getElementById('lang-current');
         if (currentBtn) currentBtn.textContent = langLabels[lang] || lang;
@@ -795,6 +1002,101 @@
         });
         var dropdown = document.querySelector('.lang-dropdown');
         if (dropdown) dropdown.classList.remove('open');
+        if (typeof updateVisitorText === 'function') updateVisitorText();
+      }
+
+      function ordinalEn(n) {
+        var d = n % 10, t = n % 100;
+        if (d === 1 && t !== 11) return n + 'st';
+        if (d === 2 && t !== 12) return n + 'nd';
+        if (d === 3 && t !== 13) return n + 'rd';
+        return n + 'th';
+      }
+      function ordinalRu(n) { return n + '-ый'; }
+      function ordinalEs(n) { return n + '.º'; }
+      function updateVisitorText() {
+        var el = document.getElementById('visitor-count');
+        if (!el) return;
+        var lang = getLang();
+        var n = parseInt(localStorage.getItem('site-visit-count') || '0', 10);
+        var t = translations[lang];
+        var text;
+        if (lang === 'ru') text = (t.visitorText || 'Вы') + ' ' + n + '-ый ' + (t.visitorSuffix || 'посетитель');
+        else if (lang === 'es') text = (t.visitorText || 'Eres el') + ' ' + ordinalEs(n) + ' ' + (t.visitorSuffix || 'visitante');
+        else text = (t.visitorText || 'You are the') + ' ' + ordinalEn(n) + ' ' + (t.visitorSuffix || 'visitor');
+        el.textContent = text;
+      }
+
+      var themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+          html.setAttribute('data-theme', next);
+          localStorage.setItem('site-theme', next);
+          var meta = document.getElementById('meta-theme-color');
+          if (meta) meta.content = next === 'light' ? '#f5f5f5' : '#0a0a0a';
+          themeToggle.setAttribute('aria-label', next === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+        });
+      }
+
+      var visitCount = parseInt(localStorage.getItem('site-visit-count') || '0', 10);
+      visitCount += 1;
+      localStorage.setItem('site-visit-count', String(visitCount));
+      updateVisitorText();
+
+      var contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        function validateEmail(email) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
+        }
+        function showError(id, msg) {
+          var el = document.getElementById(id);
+          if (el) { el.textContent = msg; el.style.display = msg ? 'block' : 'none'; }
+        }
+        function setInputError(input, hasError) {
+          if (input) input.classList.toggle('error', !!hasError);
+        }
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var nameInput = document.getElementById('form-name');
+          var emailInput = document.getElementById('form-email');
+          var messageInput = document.getElementById('form-message');
+          var lang = getLang();
+          var t = translations[lang];
+          var name = (nameInput && nameInput.value || '').trim();
+          var email = (emailInput && emailInput.value || '').trim();
+          var message = (messageInput && messageInput.value || '').trim();
+          showError('form-name-error', '');
+          showError('form-email-error', '');
+          showError('form-message-error', '');
+          setInputError(nameInput, false);
+          setInputError(emailInput, false);
+          setInputError(messageInput, false);
+          var valid = true;
+          if (!name) {
+            showError('form-name-error', t.formErrorRequired || 'This field is required.');
+            setInputError(nameInput, true);
+            valid = false;
+          }
+          if (!email) {
+            showError('form-email-error', t.formErrorRequired || 'This field is required.');
+            setInputError(emailInput, true);
+            valid = false;
+          } else if (!validateEmail(email)) {
+            showError('form-email-error', t.formErrorEmail || 'Please enter a valid email address.');
+            setInputError(emailInput, true);
+            valid = false;
+          }
+          if (!message) {
+            showError('form-message-error', t.formErrorRequired || 'This field is required.');
+            setInputError(messageInput, true);
+            valid = false;
+          }
+          if (!valid) return;
+          alert(t.formSuccess || 'Message sent (demo). We will get in touch soon!');
+          contactForm.reset();
+        });
       }
 
       var langCurrent = document.getElementById('lang-current');

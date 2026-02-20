@@ -1,7 +1,7 @@
 /**
- * Vercel Serverless: AI Chat - OpenAI (ChatGPT) API
+ * Vercel Serverless: AI Chat - OpenAI (ChatGPT) API + опциональный веб-поиск
  * Личный помощник Евгения
- * Env: OPENAI_API_KEY
+ * Env: OPENAI_API_KEY, SERPER_API_KEY (опционально — для ответов из интернета)
  */
 
 const KNOWLEDGE = `
@@ -17,22 +17,45 @@ const KNOWLEDGE = `
 Связь: Telegram @E_Berest (https://t.me/E_Berest). Отвечаю по делу, без воды. Открыт к сотрудничеству: криптопроекты, AI-продукты, автоматизация, консалтинг.
 `;
 
-const SYSTEM_PROMPT = `Ты — Личный помощник Евгения. Отвечаешь от имени помощника по данным ниже.
+const SYSTEM_PROMPT_BASE = `Ты — Личный помощник Евгения. Отвечаешь от имени помощника.
 
 ПРАВИЛА:
-1. Отвечай ТОЛЬКО на основе информации ниже
-2. Не выдумывай цены или услуги
-3. Если информации нет — скажи "Уточните, пожалуйста, у Евгения в Telegram: @E_Berest"
-4. Отвечай кратко и по делу
-5. Для связи всегда предлагай Telegram @E_Berest
+1. По вопросам об Евгении, его услугах, ценах и контактах — отвечай ТОЛЬКО по данным ниже. Не выдумывай цены или услуги.
+2. Если вопроса нет в данных ниже и нет в контексте поиска — скажи "Уточните, пожалуйста, у Евгения в Telegram: @E_Berest".
+3. Отвечай кратко и по делу.
+4. Для связи всегда предлагай Telegram @E_Berest.
 
-Данные:
+Данные об Евгении:
 ${KNOWLEDGE}`;
 
-async function callOpenAI(message) {
+/** Опциональный веб-поиск через Serper (google.serper.dev). Без ключа возвращает пустую строку. */
+async function searchWeb(query) {
+  const key = process.env.SERPER_API_KEY && typeof process.env.SERPER_API_KEY === 'string'
+    ? process.env.SERPER_API_KEY.trim() : '';
+  if (!key) return '';
+
+  try {
+    const res = await fetch('https://google.serper.dev/search', {
+      method: 'POST',
+      headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: query, num: 5 }),
+    });
+    const data = await res.json().catch(() => ({}));
+    const organic = data.organic || [];
+    if (organic.length === 0) return '';
+    const lines = organic.slice(0, 5).map((o) => `• ${(o.snippet || o.title || '').slice(0, 300)}${o.link ? ` (${o.link})` : ''}`).filter(Boolean);
+    return lines.join('\n');
+  } catch {
+    return '';
+  }
+}
+
+async function callOpenAI(message, systemContent) {
   const rawKey = process.env.OPENAI_API_KEY;
   const apiKey = rawKey && typeof rawKey === 'string' ? rawKey.trim() : '';
   if (!apiKey) throw new Error('OPENAI_API_KEY not configured');
+
+  const systemPrompt = systemContent || SYSTEM_PROMPT_BASE;
 
   const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
@@ -43,7 +66,7 @@ async function callOpenAI(message) {
     body: JSON.stringify({
       model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'system', content: systemPrompt },
         { role: 'user', content: message },
       ],
       max_tokens: 1024,
@@ -76,7 +99,12 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const response = await callOpenAI(message.trim());
+    const trimmed = message.trim();
+    const webSnippets = await searchWeb(trimmed);
+    const systemContent = webSnippets
+      ? `${SYSTEM_PROMPT_BASE}\n\n---\nЕсли вопрос не про Евгения и его услуги — можешь опереться на результаты поиска в интернете:\n${webSnippets}\n\nОтвечай кратко. Если и тут нет ответа — предложи написать Евгению в Telegram: @E_Berest.`
+      : SYSTEM_PROMPT_BASE;
+    const response = await callOpenAI(trimmed, systemContent);
     return res.status(200).json({ response });
   } catch (err) {
     return res.status(500).json({ error: err.message || 'Ошибка сервера' });
