@@ -20,6 +20,12 @@ Open `index.html` in a browser (double-click or drag into a tab).
 - **Contacts** — same socials as buttons
 - **Language** — header toggle: En / Ru (saved in `localStorage`)
 
+## Chatbot
+
+**Личный помощник Евгения** — виджет в правом нижнем углу. Отвечает на вопросы об услугах, ценах и подсказывает, как связаться (Telegram @E_Berest). Бэкенд: Vercel serverless `/api/chat.js`, модель MiniMax (M2-her).
+
+**Чтобы чат работал на Vercel:** в настройках проекта добавь переменную окружения `MINIMAX_API_KEY` (ключ с [platform.minimax.io](https://platform.minimax.io)).
+
 ## Repo
 
 Public: [github.com/AIBerest/my-website](https://github.com/AIBerest/my-website)

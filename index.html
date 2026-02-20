@@ -829,5 +829,109 @@
       sections.forEach(function(s) { observer.observe(s); });
     })();
   </script>
+
+  <!-- Chat widget: Личный помощник Евгения -->
+  <div id="ai-chat-widget">
+    <button type="button" id="ai-chat-toggle" aria-label="Open chat">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+    </button>
+    <div id="ai-chat-window">
+      <div class="ai-chat-header">
+        <span id="chat-title">Личный помощник Евгения</span>
+        <button type="button" class="ai-chat-close" aria-label="Close" onclick="closeChat()">&times;</button>
+      </div>
+      <div class="ai-chat-messages" id="chat-messages"></div>
+      <div class="ai-chat-input">
+        <input type="text" id="user-message" placeholder="Напишите сообщение..." maxlength="2000" />
+        <button type="button" id="send-btn" aria-label="Send" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <style>
+    #ai-chat-widget { --chat-primary: #00FFF0; position: fixed; bottom: 20px; right: 20px; z-index: 99999; font-family: 'Inter', system-ui, sans-serif; }
+    #ai-chat-toggle { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #00FFF0, #00B8AA); border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(0,255,240,0.35); display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; }
+    #ai-chat-toggle:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(0,255,240,0.45); }
+    #ai-chat-toggle svg { width: 26px; height: 26px; fill: #0a0a0a; }
+    #ai-chat-window { position: absolute; bottom: 72px; right: 0; width: 360px; max-width: calc(100vw - 40px); height: 480px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); display: none; flex-direction: column; overflow: hidden; }
+    #ai-chat-window.open { display: flex; }
+    .ai-chat-header { background: linear-gradient(135deg, #00FFF0, #00B8AA); color: #0a0a0a; padding: 14px 16px; font-weight: 600; font-size: 0.9375rem; display: flex; justify-content: space-between; align-items: center; }
+    .ai-chat-close { background: none; border: none; color: #0a0a0a; cursor: pointer; font-size: 22px; line-height: 1; padding: 0 4px; }
+    .ai-chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .ai-message { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
+    .ai-message.user { background: rgba(0,255,240,0.2); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .ai-message.assistant { background: rgba(255,255,255,0.08); color: #e5e5e5; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .ai-message.error { background: rgba(220,38,38,0.2); color: #fca5a5; font-size: 12px; }
+    .ai-chat-input { padding: 12px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; gap: 8px; }
+    .ai-chat-input input { flex: 1; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; background: rgba(255,255,255,0.04); color: #fff; outline: none; font-size: 14px; }
+    .ai-chat-input input::placeholder { color: rgba(255,255,255,0.4); }
+    .ai-chat-input input:focus { border-color: #00FFF0; }
+    .ai-chat-input button { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #00FFF0, #00B8AA); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .ai-chat-input button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .ai-chat-input button svg { fill: #0a0a0a; }
+    .ai-typing { display: flex; gap: 4px; padding: 10px 14px; background: rgba(255,255,255,0.08); border-radius: 14px; border-bottom-left-radius: 4px; width: fit-content; }
+    .ai-typing span { width: 6px; height: 6px; background: #00B8AA; border-radius: 50%; animation: chat-typing 1.2s infinite; }
+    .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes chat-typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+  </style>
+  <script>
+    (function() {
+      var chatConfig = { apiUrl: '/api/chat', welcomeMessage: 'Здравствуйте! Я личный помощник Евгения. Могу рассказать об услугах, ценах и как с ним связаться. О чем спросить?' };
+      var win = document.getElementById('ai-chat-window');
+      var messagesEl = document.getElementById('chat-messages');
+      var inputEl = document.getElementById('user-message');
+      var sendBtn = document.getElementById('send-btn');
+
+      window.toggleChat = function() {
+        win.classList.toggle('open');
+        if (win.classList.contains('open') && messagesEl.children.length === 0) {
+          addMsg(chatConfig.welcomeMessage, 'assistant');
+        }
+      };
+      window.closeChat = function() { win.classList.remove('open'); };
+      document.getElementById('ai-chat-toggle').addEventListener('click', toggleChat);
+      inputEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMessage(); });
+
+      function addMsg(text, role) {
+        var div = document.createElement('div');
+        div.className = 'ai-message ' + role;
+        div.textContent = text;
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+      function addTyping() {
+        var div = document.createElement('div');
+        div.className = 'ai-typing';
+        div.id = 'typing-' + Date.now();
+        div.innerHTML = '<span></span><span></span><span></span>';
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return div.id;
+      }
+      function removeTyping(id) { var el = document.getElementById(id); if (el) el.remove(); }
+
+      window.sendMessage = async function() {
+        var message = inputEl.value.trim();
+        if (!message) return;
+        addMsg(message, 'user');
+        inputEl.value = '';
+        sendBtn.disabled = true;
+        var typingId = addTyping();
+        try {
+          var res = await fetch(chatConfig.apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message }) });
+          removeTyping(typingId);
+          if (!res.ok) { var err = await res.json(); throw new Error(err.error || 'Ошибка запроса'); }
+          var data = await res.json();
+          addMsg(data.response, 'assistant');
+        } catch (err) {
+          removeTyping(typingId);
+          addMsg('Сейчас не могу ответить. Напишите Евгению в Telegram: t.me/E_Berest', 'error');
+        }
+        sendBtn.disabled = false;
+      };
+    })();
+  </script>
 </body>
 </html>
