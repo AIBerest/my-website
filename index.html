@@ -927,7 +927,14 @@
           addMsg(data.response, 'assistant');
         } catch (err) {
           removeTyping(typingId);
-          addMsg('Сейчас не могу ответить. Напишите Евгению в Telegram: t.me/E_Berest', 'error');
+          var errMsg = (err && err.message) ? err.message : 'Ошибка соединения';
+          if (errMsg.indexOf('MINIMAX_API_KEY') !== -1) {
+            addMsg('Бот не настроен: на сервере не задан ключ MiniMax. Напишите Евгению в Telegram: t.me/E_Berest', 'error');
+          } else if (errMsg.indexOf('MiniMax') !== -1) {
+            addMsg('Ошибка бота: ' + errMsg + '. Напишите Евгению: t.me/E_Berest', 'error');
+          } else {
+            addMsg('Сейчас не могу ответить. Напишите Евгению в Telegram: t.me/E_Berest', 'error');
+          }
         }
         sendBtn.disabled = false;
       };
