@@ -1,0 +1,10 @@
+---
+description: Use short hyphens (-) in text, not long em dashes (—)
+alwaysApply: true
+---
+
+# Short dashes in text
+
+- In all projects, use **short hyphens** (`-`, minus) in running text, not long em dashes (`—`).
+- Apply to: UI copy, taglines, descriptions, comments in user-facing content, meta descriptions.
+- Example: "Write on Telegram - I reply to the point" not "Write on Telegram — I reply to the point".

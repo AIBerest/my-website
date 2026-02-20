@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Evgeniy Berestenko — crypto, vibecoding & building the next vibe.">
+  <meta name="description" content="Evgeniy Berestenko - crypto, vibecoding & building the next vibe.">
   <meta name="theme-color" content="#0a0a0a">
   <title>Evgeniy Berestenko</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,49 +39,84 @@
       align-items: center;
       justify-content: space-between;
     }
-    .lang-toggle-wrap {
+    .lang-dropdown {
       position: relative;
-      display: inline-flex;
-      padding: 4px;
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 9999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
       animation: fadeIn 0.6s ease-out 0.2s forwards;
       opacity: 0;
     }
-    .lang-toggle {
-      display: flex;
-      position: relative;
-      z-index: 1;
-      border-radius: 9999px;
-    }
-    .lang-toggle button {
-      padding: 0.4rem 0.9rem;
+    .lang-current {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.75rem;
       font-size: 0.8125rem;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .lang-current:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .lang-current::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid rgba(255, 255, 255, 0.5);
+      margin-left: 2px;
+    }
+    .lang-dropdown.open .lang-current::after { transform: scaleY(-1); }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      min-width: 100%;
+      padding: 4px;
+      background: rgba(18, 18, 18, 0.98);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+      z-index: 100;
+    }
+    .lang-dropdown.open .lang-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    .lang-menu button {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.8);
       background: none;
       border: none;
-      border-radius: 9999px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: color 0.25s;
+      text-align: left;
       font-family: inherit;
+      transition: background 0.15s, color 0.15s;
     }
-    .lang-toggle button:hover { color: rgba(255, 255, 255, 0.9); }
-    .lang-toggle button.active { color: #0a0a0a; }
-    .lang-toggle-slider {
-      position: absolute;
-      top: 4px;
-      left: 4px;
-      width: calc(50% - 6px);
-      height: calc(100% - 8px);
-      background: linear-gradient(135deg, #00FFF0, #00B8AA);
-      border-radius: 9999px;
-      transition: left 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-      z-index: 0;
+    .lang-menu button:hover {
+      background: rgba(0, 255, 240, 0.1);
+      color: #00FFF0;
     }
-    .lang-toggle-wrap[data-lang="en"] .lang-toggle-slider { left: 4px; }
-    .lang-toggle-wrap[data-lang="ru"] .lang-toggle-slider { left: calc(50% + 2px); }
+    .lang-menu button.lang-option.active {
+      color: #00FFF0;
+      background: rgba(0, 255, 240, 0.08);
+    }
     .logo-link {
       display: inline-flex;
       align-items: center;
@@ -160,6 +195,26 @@
       color: #9ca3af;
       max-width: 28rem;
     }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.25rem;
+      margin-bottom: 1rem;
+      border-radius: 100px;
+      background: rgba(0, 255, 240, 0.1);
+      border: 1px solid rgba(0, 255, 240, 0.4);
+      color: #00FFF0;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .hero-cta:hover {
+      background: rgba(0, 255, 240, 0.15);
+      border-color: rgba(0, 255, 240, 0.6);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.2);
+    }
     .hero-social {
       display: flex;
       gap: 1rem;
@@ -183,7 +238,7 @@
       border-color: rgba(0, 255, 240, 0.5);
       box-shadow: 0 0 20px rgba(0, 255, 240, 0.4);
     }
-    /* Sections — modern studio style + reveal animation */
+    /* Sections - modern studio style + reveal animation */
     .section { padding: 5rem 0; }
     .section.enter {
       opacity: 0;
@@ -196,9 +251,11 @@
     .section.enter .section-title,
     .section.enter .about-text,
     .section.enter .contact-lead,
+    .section.enter .contact-telegram-block,
     .section.enter .contact-buttons,
     .section.enter .project-item,
-    .section.enter .project-card {
+    .section.enter .project-card,
+    .section.enter .skill-card {
       opacity: 0;
       transform: translateY(20px);
     }
@@ -214,6 +271,9 @@
     .section.enter.visible .contact-lead {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
     }
+    .section.enter.visible .contact-telegram-block {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.42s forwards;
+    }
     .section.enter.visible .contact-buttons {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
     }
@@ -228,6 +288,24 @@
     }
     .section.enter.visible .project-card:nth-child(4) {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.64s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(1) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(2) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(3) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(4) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(5) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+    }
+    .section.enter.visible .skill-card:nth-child(6) {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.73s forwards;
     }
     .section-label {
       font-size: 0.75rem;
@@ -247,7 +325,7 @@
     @media (min-width: 768px) {
       .section-title { font-size: 2.5rem; margin-bottom: 3rem; }
     }
-    /* About — typography-led, no heavy card */
+    /* About - typography-led, no heavy card */
     .about-text {
       max-width: 38rem;
       margin: 0;
@@ -257,7 +335,48 @@
       font-weight: 400;
     }
     .about-text strong { color: rgba(255, 255, 255, 0.9); font-weight: 500; }
-    /* Projects — cards grid */
+    /* Skills - cards grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+    @media (min-width: 640px) {
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .skills-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .skill-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 0 24px rgba(0, 255, 240, 0.08);
+    }
+    .skill-card-emoji {
+      display: inline-block;
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+      line-height: 1;
+    }
+    .skill-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .skill-card-desc {
+      margin: 0;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    /* Projects - cards grid */
     .projects-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -309,12 +428,47 @@
       line-height: 1.5;
       color: rgba(255, 255, 255, 0.5);
     }
-    /* Contacts — clean, spacious */
+    .project-card-placeholder {
+      cursor: default;
+      pointer-events: none;
+    }
+    .project-card-placeholder:hover h3 { color: inherit; }
+    /* Contacts - clean, spacious */
     .contact-lead {
-      margin: 0 0 2rem;
+      margin: 0 0 1rem;
       font-size: 1.125rem;
       color: rgba(255, 255, 255, 0.6);
       line-height: 1.6;
+    }
+    .contact-telegram-block {
+      margin: 0 0 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem 1rem;
+    }
+    .contact-telegram-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      background: rgba(0, 255, 240, 0.1);
+      border: 1px solid rgba(0, 255, 240, 0.35);
+      color: #00FFF0;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .contact-telegram-cta:hover {
+      background: rgba(0, 255, 240, 0.15);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.2);
+    }
+    .contact-telegram-tagline {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.5;
     }
     .contact-buttons {
       display: flex;
@@ -377,11 +531,12 @@
       <span class="logo-icon">EB</span>
       <span class="logo-text">Evgeniy B.</span>
     </a>
-    <div class="lang-toggle-wrap" data-lang="en" aria-label="Language">
-      <div class="lang-toggle">
-        <span class="lang-toggle-slider"></span>
-        <button type="button" class="lang-option active" data-lang="en">En</button>
-        <button type="button" class="lang-option" data-lang="ru">Ru</button>
+    <div class="lang-dropdown" aria-label="Language">
+      <button type="button" class="lang-current" id="lang-current" aria-haspopup="true" aria-expanded="false">En</button>
+      <div class="lang-menu" id="lang-menu" role="menu">
+        <button type="button" role="menuitem" data-lang="en" class="lang-option">En</button>
+        <button type="button" role="menuitem" data-lang="es" class="lang-option">Es</button>
+        <button type="button" role="menuitem" data-lang="ru" class="lang-option">Ru</button>
       </div>
     </div>
   </header>
@@ -393,10 +548,11 @@
       </div>
       <div class="hero-content">
         <h1>Evgeniy Berestenko</h1>
-        <p class="hero-tagline" data-i18n="tagline">Crypto, vibecoding & building the next vibe.</p>
+        <p class="hero-tagline" data-i18n="tagline">In crypto since 2017. Since 2025: vibecoding, agents, automation - less noise, more result.</p>
+        <a href="https://t.me/E_Berest" class="hero-cta" data-i18n="heroCta" target="_blank" rel="noopener noreferrer">DM me on Telegram</a>
         <div class="hero-social">
           <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="#" aria-label="Telegram"><i class="fab fa-telegram-plane"></i></a>
+          <a href="https://t.me/E_Berest" aria-label="Telegram" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i></a>
           <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
       </div>
@@ -405,7 +561,44 @@
     <section class="section enter" id="about">
       <p class="section-label" data-i18n="aboutLabel">About</p>
       <h2 class="section-title" data-i18n="aboutTitle">A bit about me</h2>
-      <p class="about-text" data-i18n-html="aboutText">Crypto veteran, in crypto since 2017. Into vibecoding; I build vibe and AI solutions that save time and money.</p>
+      <p class="about-text" data-i18n-html="aboutText">I make technology work for people, not the other way around: crypto without sectarianism, AI without magic fog, and automation without drowning in docs.</p>
+    </section>
+
+    <section class="section enter" id="skills">
+      <p class="section-label" data-i18n="skillsLabel">Skills</p>
+      <h2 class="section-title" data-i18n="skillsTitle">My skills</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🪙</span>
+          <h3 data-i18n="skill1Title">Crypto</h3>
+          <p class="skill-card-desc" data-i18n="skill1Desc">In crypto since 2017: tokenomics, DeFi, launching and growing communities, supporting investors and users.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🤖</span>
+          <h3 data-i18n="skill2Title">AI & ML</h3>
+          <p class="skill-card-desc" data-i18n="skill2Desc">Building agents and integrations that take over routine: support, data collection, basic research.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">⚡</span>
+          <h3 data-i18n="skill3Title">Vibecoding</h3>
+          <p class="skill-card-desc" data-i18n="skill3Desc">Fast MVPs and frontends to validate hypotheses in days, not months.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🔧</span>
+          <h3 data-i18n="skill4Title">Automation</h3>
+          <p class="skill-card-desc" data-i18n="skill4Desc">Connecting services, scripts, and no-code flows so the business spends less time on manual work.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">👥</span>
+          <h3 data-i18n="skill5Title">Community</h3>
+          <p class="skill-card-desc" data-i18n="skill5Desc">Building warm communities around products: support, moderation, feedback, tone.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-card-emoji" aria-hidden="true">🎯</span>
+          <h3 data-i18n="skill6Title">Product & UX thinking</h3>
+          <p class="skill-card-desc" data-i18n="skill6Desc">Designing user journey, interfaces and copy so the product is clear, easy to use and builds trust from first touch.</p>
+        </div>
+      </div>
     </section>
 
     <section class="section enter" id="projects">
@@ -415,41 +608,44 @@
         <a href="#" class="project-card">
           <div class="project-card-image img-1"><i class="fas fa-robot" aria-hidden="true"></i></div>
           <div class="project-card-body">
-            <h3 data-i18n="project1Title">AI Agent for Replay</h3>
-            <p class="project-card-desc" data-i18n="project1Desc">AI agent for the Replay community: automation and smart replies that save time for moderators and members.</p>
+            <h3 data-i18n="project1Title">AI Agent Replay Community</h3>
+            <p class="project-card-desc" data-i18n="project1Desc">Set up a bot and flows for a crypto project community: automatic notifications, FAQ, spam filtering. Support is lighter, replies are faster, and the team has less manual routine.</p>
           </div>
         </a>
-        <a href="#" class="project-card">
+        <div class="project-card project-card-placeholder">
           <div class="project-card-image img-2"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
           <div class="project-card-body">
-            <h3 data-i18n="project2Title">СудьбаПро.AI</h3>
-            <p class="project-card-desc" data-i18n="project2Desc">AI-powered tool for fate and life-path insights. Combines tradition with modern ML for personalized readings.</p>
+            <h3 data-i18n="project2Title">Coming soon</h3>
+            <p class="project-card-desc" data-i18n="project2Desc">New projects and case studies will be added soon.</p>
           </div>
-        </a>
-        <a href="#" class="project-card">
+        </div>
+        <div class="project-card project-card-placeholder">
           <div class="project-card-image img-3"><i class="fas fa-bolt" aria-hidden="true"></i></div>
           <div class="project-card-body">
-            <h3 data-i18n="project3Title">Vibe Automations</h3>
-            <p class="project-card-desc" data-i18n="project3Desc">No-code style automations and integrations that connect your tools and cut repetitive work in half.</p>
+            <h3 data-i18n="project3Title">Coming soon</h3>
+            <p class="project-card-desc" data-i18n="project3Desc">New projects and case studies will be added soon.</p>
           </div>
-        </a>
-        <a href="#" class="project-card">
+        </div>
+        <div class="project-card project-card-placeholder">
           <div class="project-card-image img-4"><i class="fas fa-code" aria-hidden="true"></i></div>
           <div class="project-card-body">
-            <h3 data-i18n="project4Title">Dev Tools & Scripts</h3>
-            <p class="project-card-desc" data-i18n="project4Desc">Small utilities and scripts for developers: deploy helpers, parsers, and CLI tools that speed up daily workflow.</p>
+            <h3 data-i18n="project4Title">Coming soon</h3>
+            <p class="project-card-desc" data-i18n="project4Desc">New projects and case studies will be added soon.</p>
           </div>
-        </a>
+        </div>
       </div>
     </section>
 
     <section class="section enter" id="contacts">
       <p class="section-label" data-i18n="contactsLabel">Get in touch</p>
       <h2 class="section-title" data-i18n="contactsTitle">Contacts</h2>
-      <p class="contact-lead" data-i18n="contactLead">Reach me on socials — drop a message anytime.</p>
+      <p class="contact-lead" data-i18n="contactLead">Open to collaboration: crypto projects, AI products, process automation, and consulting.</p>
+      <div class="contact-telegram-block">
+        <a href="https://t.me/E_Berest" class="contact-telegram-cta" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="heroCta">DM me on Telegram</span></a>
+        <span class="contact-telegram-tagline" data-i18n="contactTelegramTagline">Write on Telegram - I reply to the point, no fluff.</span>
+      </div>
       <div class="contact-buttons">
-        <a href="#"><i class="fab fa-youtube"></i> YouTube</a>
-        <a href="#"><i class="fab fa-telegram-plane"></i> Telegram</a>
+        <a href="https://t.me/E_Berest" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> Telegram</a>
         <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
       </div>
     </section>
@@ -459,57 +655,128 @@
     (function() {
       var translations = {
         en: {
-          tagline: 'Crypto, vibecoding & building the next vibe.',
+          tagline: 'In crypto since 2017. Since 2025: vibecoding, agents, automation - less noise, more result.',
           aboutLabel: 'About',
           aboutTitle: 'A bit about me',
-          aboutText: 'Crypto veteran, in crypto since 2017. Into vibecoding; I build <strong>vibe and AI solutions</strong> that save time and money.',
+          aboutText: 'I make technology work for people, not the other way around: crypto without sectarianism, AI without magic fog, and automation without drowning in docs.',
+          heroCta: 'DM me on Telegram',
+          skillsLabel: 'Skills',
+          skillsTitle: 'My skills',
+          skill1Title: 'Crypto',
+          skill1Desc: 'In crypto since 2017: tokenomics, DeFi, launching and growing communities, supporting investors and users.',
+          skill2Title: 'AI & ML',
+          skill2Desc: 'Building agents and integrations that take over routine: support, data collection, basic research.',
+          skill3Title: 'Vibecoding',
+          skill3Desc: 'Fast MVPs and frontends to validate hypotheses in days, not months.',
+          skill4Title: 'Automation',
+          skill4Desc: 'Connecting services, scripts, and no-code flows so the business spends less time on manual work.',
+          skill5Title: 'Community',
+          skill5Desc: 'Building warm communities around products: support, moderation, feedback, tone.',
+          skill6Title: 'Product & UX thinking',
+          skill6Desc: 'Designing user journey, interfaces and copy so the product is clear, easy to use and builds trust from first touch.',
           workLabel: 'Work',
           projectsTitle: 'Projects',
-          project1Title: 'AI Agent for Replay',
-          project1Desc: 'AI agent for the Replay community: automation and smart replies that save time for moderators and members.',
-          project2Title: 'СудьбаПро.AI',
-          project2Desc: 'AI-powered tool for fate and life-path insights. Combines tradition with modern ML for personalized readings.',
-          project3Title: 'Vibe Automations',
-          project3Desc: 'No-code style automations and integrations that connect your tools and cut repetitive work in half.',
-          project4Title: 'Dev Tools & Scripts',
-          project4Desc: 'Small utilities and scripts for developers: deploy helpers, parsers, and CLI tools that speed up daily workflow.',
+          project1Title: 'AI Agent Replay Community',
+          project1Desc: 'Set up a bot and flows for a crypto project community: automatic notifications, FAQ, spam filtering. Support is lighter, replies are faster, and the team has less manual routine.',
+          project2Title: 'Coming soon',
+          project2Desc: 'New projects and case studies will be added soon.',
+          project3Title: 'Coming soon',
+          project3Desc: 'New projects and case studies will be added soon.',
+          project4Title: 'Coming soon',
+          project4Desc: 'New projects and case studies will be added soon.',
           contactsLabel: 'Get in touch',
           contactsTitle: 'Contacts',
-          contactLead: 'Reach me on socials — drop a message anytime.'
+          contactLead: 'Open to collaboration: crypto projects, AI products, process automation, and consulting.',
+          contactTelegramTagline: 'Write on Telegram - I reply to the point, no fluff.'
+        },
+        es: {
+          tagline: 'En crypto desde 2017. Desde 2025: vibecoding, agentes, automatización - menos ruido, más resultado.',
+          aboutLabel: 'Sobre mí',
+          aboutTitle: 'Un poco sobre mí',
+          aboutText: 'Hago que la tecnología trabaje para las personas, y no al revés: crypto sin sectarismo, AI sin niebla mágica y automatización sin ahogarse en documentación.',
+          heroCta: 'Escríbeme por Telegram',
+          skillsLabel: 'Habilidades',
+          skillsTitle: 'Mis habilidades',
+          skill1Title: 'Crypto',
+          skill1Desc: 'En crypto desde 2017: tokenómica, DeFi, lanzamiento y crecimiento de comunidades, soporte a inversores y usuarios.',
+          skill2Title: 'AI y ML',
+          skill2Desc: 'Construyo agentes e integraciones que asumen la rutina: soporte, recopilación de datos, investigación básica.',
+          skill3Title: 'Vibecoding',
+          skill3Desc: 'MVPs y frontends rápidos para validar hipótesis en días, no meses.',
+          skill4Title: 'Automatización',
+          skill4Desc: 'Conecto servicios, scripts y flujos no-code para que el negocio pierda menos tiempo en trabajo manual.',
+          skill5Title: 'Comunidad',
+          skill5Desc: 'Construyo comunidades cálidas alrededor de productos: soporte, moderación, feedback, tono.',
+          skill6Title: 'Producto y UX',
+          skill6Desc: 'Diseño el recorrido del usuario, interfaces y textos para que el producto sea claro, cómodo y genere confianza desde el primer contacto.',
+          workLabel: 'Trabajo',
+          projectsTitle: 'Proyectos',
+          project1Title: 'AI Agent Replay Community',
+          project1Desc: 'Configuré un bot y flujos para la comunidad de un proyecto crypto: notificaciones automáticas, FAQ, filtrado de spam. Menos carga de soporte, respuestas más rápidas y menos rutina manual para el equipo.',
+          project2Title: 'Próximamente',
+          project2Desc: 'Nuevos proyectos y casos de estudio se añadirán pronto.',
+          project3Title: 'Próximamente',
+          project3Desc: 'Nuevos proyectos y casos de estudio se añadirán pronto.',
+          project4Title: 'Próximamente',
+          project4Desc: 'Nuevos proyectos y casos de estudio se añadirán pronto.',
+          contactsLabel: 'Contacto',
+          contactsTitle: 'Contactos',
+          contactLead: 'Abierto a colaboración: proyectos crypto, productos AI, automatización de procesos y consultoría.',
+          contactTelegramTagline: 'Escribe por Telegram - respondo al grano, sin relleno.'
         },
         ru: {
-          tagline: 'Крипто, вайб-кодинг и создание следующего вайба.',
+          tagline: 'С 2017 в крипте. С 2025: vibecoding, агенты, автоматизация - меньше шума, больше результата.',
           aboutLabel: 'Обо мне',
           aboutTitle: 'Немного обо мне',
-          aboutText: 'Криптоветеран, в крипте с 2017. Увлекаюсь вайбкодингом, создаю <strong>вайб и AI‑решения</strong>, которые экономят деньги и время.',
+          aboutText: 'Делаю так, чтобы технологии работали на людей, а не наоборот: крипта без сектантства, AI без магического тумана и автоматизация без перелопачивания документации.',
+          heroCta: 'Написать в Telegram',
+          skillsLabel: 'Навыки',
+          skillsTitle: 'Мои навыки',
+          skill1Title: 'Крипто',
+          skill1Desc: 'В крипте с 2017: токеномика, DeFi, запуск и рост комьюнити, поддержка инвесторов и пользователей.',
+          skill2Title: 'AI и ML',
+          skill2Desc: 'Строю агентов и интеграции, которые берут на себя рутину: саппорт, сбор данных, базовые ресёрчи.',
+          skill3Title: 'Вайбкодинг',
+          skill3Desc: 'Быстро собираю MVP и фронтенд, чтобы проверить гипотезу не за месяцы, а за дни.',
+          skill4Title: 'Автоматизация',
+          skill4Desc: 'Связываю сервисы, пишу скрипты и no-code сценарии, чтобы бизнес меньше жёг время на ручные процессы.',
+          skill5Title: 'Комьюнити',
+          skill5Desc: 'Помогаю строить тёплые комьюнити вокруг продукта: саппорт, модерация, обратная связь, тон коммуникации.',
+          skill6Title: 'Product & UX thinking',
+          skill6Desc: 'Проектирую путь пользователя, интерфейсы и тексты так, чтобы продукт был понятен, удобен и вызывал доверие с первого касания.',
           workLabel: 'Работы',
           projectsTitle: 'Проекты',
-          project1Title: 'AI-агент для Replay',
-          project1Desc: 'AI-агент для сообщества Replay: автоматизация и умные ответы, экономящие время модераторам и участникам.',
-          project2Title: 'СудьбаПро.AI',
-          project2Desc: 'AI-инструмент для инсайтов по судьбе и жизненному пути. Сочетает традиции с современным ML для персональных раскладов.',
-          project3Title: 'Vibe Automations',
-          project3Desc: 'Автоматизации и интеграции в стиле no-code: связывают ваши инструменты и сокращают рутину вдвое.',
-          project4Title: 'Dev Tools & Scripts',
-          project4Desc: 'Утилиты и скрипты для разработчиков: хелперы деплоя, парсеры и CLI, ускоряющие ежедневную работу.',
+          project1Title: 'AI Agent Replay Community',
+          project1Desc: 'Настроил бота и сценарии для комьюнити крипто-проекта: автоматические уведомления, FAQ, фильтрация спама. В итоге саппорт-разгрузка, быстрее ответы и меньше ручной рутины для команды.',
+          project2Title: 'Скоро',
+          project2Desc: 'Скоро появятся новые проекты и кейсы.',
+          project3Title: 'Скоро',
+          project3Desc: 'Скоро появятся новые проекты и кейсы.',
+          project4Title: 'Скоро',
+          project4Desc: 'Скоро появятся новые проекты и кейсы.',
           contactsLabel: 'Связаться',
           contactsTitle: 'Контакты',
-          contactLead: 'Пишите в соцсети — отвечу в любое время.'
+          contactLead: 'Открыт к сотрудничеству: криптопроекты, AI‑продукты, автоматизация процессов и консалтинг.',
+          contactTelegramTagline: 'Пишите в Telegram - отвечаю по делу и без воды.'
         }
       };
 
+      var langLabels = { en: 'En', es: 'Es', ru: 'Ru' };
+
       function getLang() {
         var saved = localStorage.getItem('site-lang');
-        return (saved === 'ru' || saved === 'en') ? saved : 'en';
+        return (saved === 'ru' || saved === 'en' || saved === 'es') ? saved : 'en';
       }
 
       function setLang(lang) {
         localStorage.setItem('site-lang', lang);
-        document.documentElement.lang = lang === 'ru' ? 'ru' : 'en';
+        document.documentElement.lang = lang === 'ru' ? 'ru' : (lang === 'es' ? 'es' : 'en');
         var meta = document.querySelector('meta[name="description"]');
-        if (meta) meta.content = lang === 'ru'
-          ? 'Евгений Берестенко — крипто, вайб-кодинг и создание следующего вайба.'
-          : 'Evgeniy Berestenko — crypto, vibecoding & building the next vibe.';
+        if (meta) {
+          if (lang === 'ru') meta.content = 'Евгений Берестенко - крипто, vibecoding, агенты и автоматизация.';
+          else if (lang === 'es') meta.content = 'Evgeniy Berestenko - crypto, vibecoding, agentes y automatización.';
+          else meta.content = 'Evgeniy Berestenko - crypto, vibecoding, agents & automation.';
+        }
 
         var t = translations[lang];
         document.querySelectorAll('[data-i18n]').forEach(function(el) {
@@ -521,18 +788,34 @@
           if (t[key]) el.innerHTML = t[key];
         });
 
+        var currentBtn = document.getElementById('lang-current');
+        if (currentBtn) currentBtn.textContent = langLabels[lang] || lang;
         document.querySelectorAll('.lang-option').forEach(function(btn) {
           btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
         });
-        var wrap = document.querySelector('.lang-toggle-wrap');
-        if (wrap) wrap.setAttribute('data-lang', lang);
+        var dropdown = document.querySelector('.lang-dropdown');
+        if (dropdown) dropdown.classList.remove('open');
       }
 
+      var langCurrent = document.getElementById('lang-current');
+      var langMenu = document.getElementById('lang-menu');
+      var langDropdown = document.querySelector('.lang-dropdown');
+      if (langCurrent && langDropdown) {
+        langCurrent.addEventListener('click', function(e) {
+          e.stopPropagation();
+          langDropdown.classList.toggle('open');
+          langCurrent.setAttribute('aria-expanded', langDropdown.classList.contains('open'));
+        });
+      }
       document.querySelectorAll('.lang-option').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
           e.preventDefault();
           setLang(btn.getAttribute('data-lang'));
         });
+      });
+      document.addEventListener('click', function() {
+        if (langDropdown) langDropdown.classList.remove('open');
+        if (langCurrent) langCurrent.setAttribute('aria-expanded', 'false');
       });
 
       setLang(getLang());

@@ -198,8 +198,7 @@
     .section.enter .contact-lead,
     .section.enter .contact-buttons,
     .section.enter .project-item,
-    .section.enter .project-card,
-    .section.enter .skill-card {
+    .section.enter .project-card {
       opacity: 0;
       transform: translateY(20px);
     }
@@ -230,24 +229,6 @@
     .section.enter.visible .project-card:nth-child(4) {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.64s forwards;
     }
-    .section.enter.visible .skill-card:nth-child(1) {
-      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-    }
-    .section.enter.visible .skill-card:nth-child(2) {
-      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
-    }
-    .section.enter.visible .skill-card:nth-child(3) {
-      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
-    }
-    .section.enter.visible .skill-card:nth-child(4) {
-      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
-    }
-    .section.enter.visible .skill-card:nth-child(5) {
-      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
-    }
-    .section.enter.visible .skill-card:nth-child(6) {
-      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
-    }
     .section-label {
       font-size: 0.75rem;
       font-weight: 500;
@@ -276,47 +257,6 @@
       font-weight: 400;
     }
     .about-text strong { color: rgba(255, 255, 255, 0.9); font-weight: 500; }
-    /* Skills — cards grid */
-    .skills-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-    @media (min-width: 640px) {
-      .skills-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (min-width: 900px) {
-      .skills-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-    .skill-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 1rem;
-      padding: 1.25rem;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-    }
-    .skill-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 0 24px rgba(0, 255, 240, 0.08);
-    }
-    .skill-card-emoji {
-      display: inline-block;
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
-      line-height: 1;
-    }
-    .skill-card h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: #fff;
-    }
-    .skill-card-desc {
-      margin: 0;
-      font-size: 0.875rem;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.5);
-    }
     /* Projects — cards grid */
     .projects-grid {
       display: grid;
@@ -468,43 +408,6 @@
       <p class="about-text" data-i18n-html="aboutText">Crypto veteran, in crypto since 2017. Into vibecoding; I build vibe and AI solutions that save time and money.</p>
     </section>
 
-    <section class="section enter" id="skills">
-      <p class="section-label" data-i18n="skillsLabel">Skills</p>
-      <h2 class="section-title" data-i18n="skillsTitle">My skills</h2>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🪙</span>
-          <h3 data-i18n="skill1Title">Crypto</h3>
-          <p class="skill-card-desc" data-i18n="skill1Desc">Since 2017: DeFi, tokens, and community growth.</p>
-        </div>
-        <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🤖</span>
-          <h3 data-i18n="skill2Title">AI & ML</h3>
-          <p class="skill-card-desc" data-i18n="skill2Desc">Agents, automation, and practical integrations.</p>
-        </div>
-        <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">⚡</span>
-          <h3 data-i18n="skill3Title">Vibecoding</h3>
-          <p class="skill-card-desc" data-i18n="skill3Desc">Fast prototypes, frontend polish, and product vibe.</p>
-        </div>
-        <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🔧</span>
-          <h3 data-i18n="skill4Title">Automation</h3>
-          <p class="skill-card-desc" data-i18n="skill4Desc">No-code workflows, scripts, and service orchestration.</p>
-        </div>
-        <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🛠</span>
-          <h3 data-i18n="skill5Title">Dev tools</h3>
-          <p class="skill-card-desc" data-i18n="skill5Desc">CLI utilities, parsers, deployment helpers.</p>
-        </div>
-        <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">👥</span>
-          <h3 data-i18n="skill6Title">Community</h3>
-          <p class="skill-card-desc" data-i18n="skill6Desc">Replay community support, moderation, and user focus.</p>
-        </div>
-      </div>
-    </section>
-
     <section class="section enter" id="projects">
       <p class="section-label" data-i18n="workLabel">Work</p>
       <h2 class="section-title" data-i18n="projectsTitle">Projects</h2>
@@ -560,20 +463,6 @@
           aboutLabel: 'About',
           aboutTitle: 'A bit about me',
           aboutText: 'Crypto veteran, in crypto since 2017. Into vibecoding; I build <strong>vibe and AI solutions</strong> that save time and money.',
-          skillsLabel: 'Skills',
-          skillsTitle: 'My skills',
-          skill1Title: 'Crypto',
-          skill1Desc: 'Since 2017: DeFi, tokens, and community growth.',
-          skill2Title: 'AI & ML',
-          skill2Desc: 'Agents, automation, and practical integrations.',
-          skill3Title: 'Vibecoding',
-          skill3Desc: 'Fast prototypes, frontend polish, and product vibe.',
-          skill4Title: 'Automation',
-          skill4Desc: 'No-code workflows, scripts, and service orchestration.',
-          skill5Title: 'Dev tools',
-          skill5Desc: 'CLI utilities, parsers, deployment helpers.',
-          skill6Title: 'Community',
-          skill6Desc: 'Replay community support, moderation, and user focus.',
           workLabel: 'Work',
           projectsTitle: 'Projects',
           project1Title: 'AI Agent for Replay',
@@ -593,20 +482,6 @@
           aboutLabel: 'Обо мне',
           aboutTitle: 'Немного обо мне',
           aboutText: 'Криптоветеран, в крипте с 2017. Увлекаюсь вайбкодингом, создаю <strong>вайб и AI‑решения</strong>, которые экономят деньги и время.',
-          skillsLabel: 'Навыки',
-          skillsTitle: 'Мои навыки',
-          skill1Title: 'Крипто',
-          skill1Desc: 'Опыт с 2017: DeFi, токены и развитие комьюнити.',
-          skill2Title: 'AI и ML',
-          skill2Desc: 'Агенты, автоматизация и практичные интеграции.',
-          skill3Title: 'Вайбкодинг',
-          skill3Desc: 'Быстрые прототипы, аккуратный фронт и продуктовый вайб.',
-          skill4Title: 'Автоматизация',
-          skill4Desc: 'No-code сценарии, скрипты и связка сервисов.',
-          skill5Title: 'Инструменты',
-          skill5Desc: 'CLI-утилиты, парсеры и помощники для деплоя.',
-          skill6Title: 'Комьюнити',
-          skill6Desc: 'Поддержка сообщества Replay, модерация и фокус на людях.',
           workLabel: 'Работы',
           projectsTitle: 'Проекты',
           project1Title: 'AI-агент для Replay',

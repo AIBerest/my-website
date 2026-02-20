@@ -28,3 +28,4 @@ temp/
 
 # Dependencies (if you add npm later)
 node_modules/
+.vercel
