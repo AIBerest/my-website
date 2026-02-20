@@ -1,7 +1,7 @@
 /**
- * Vercel Serverless: AI Chat - MiniMax API
+ * Vercel Serverless: AI Chat - OpenAI (ChatGPT) API
  * Личный помощник Евгения
- * Env: MINIMAX_API_KEY
+ * Env: OPENAI_API_KEY
  */
 
 const KNOWLEDGE = `
@@ -29,40 +29,33 @@ const SYSTEM_PROMPT = `Ты — Личный помощник Евгения. О
 Данные:
 ${KNOWLEDGE}`;
 
-async function callMiniMax(message) {
-  const rawKey = process.env.MINIMAX_API_KEY;
+async function callOpenAI(message) {
+  const rawKey = process.env.OPENAI_API_KEY;
   const apiKey = rawKey && typeof rawKey === 'string' ? rawKey.trim() : '';
-  if (!apiKey) throw new Error('MINIMAX_API_KEY not configured');
+  if (!apiKey) throw new Error('OPENAI_API_KEY not configured');
 
-  const res = await fetch('https://api.minimax.io/v1/text/chatcompletion_v2', {
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'M2-her',
+      model: 'gpt-4o-mini',
       messages: [
-        { role: 'system', name: 'Assistant', content: SYSTEM_PROMPT },
-        { role: 'user', name: 'User', content: message },
+        { role: 'system', content: SYSTEM_PROMPT },
+        { role: 'user', content: message },
       ],
-      max_completion_tokens: 1024,
+      max_tokens: 1024,
       temperature: 0.7,
-      top_p: 0.95,
     }),
   });
 
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    const msg = data?.base_resp?.status_msg || data?.error?.message || data?.error || res.statusText;
-    throw new Error(`MiniMax HTTP ${res.status}: ${msg || JSON.stringify(data)}`);
-  }
-
-  if (data.base_resp && data.base_resp.status_code !== 0) {
-    const code = data.base_resp.status_code;
-    const msg = data.base_resp.status_msg || 'MiniMax API error';
-    throw new Error(`MiniMax ${code}: ${msg}`);
+    const msg = data?.error?.message || data?.error?.code || res.statusText;
+    throw new Error(`OpenAI HTTP ${res.status}: ${msg || JSON.stringify(data)}`);
   }
 
   const content = data?.choices?.[0]?.message?.content;
@@ -83,7 +76,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const response = await callMiniMax(message.trim());
+    const response = await callOpenAI(message.trim());
     return res.status(200).json({ response });
   } catch (err) {
     return res.status(500).json({ error: err.message || 'Ошибка сервера' });

@@ -22,9 +22,9 @@ Open `index.html` in a browser (double-click or drag into a tab).
 
 ## Chatbot
 
-**Личный помощник Евгения** — виджет в правом нижнем углу. Отвечает на вопросы об услугах, ценах и подсказывает, как связаться (Telegram @E_Berest). Бэкенд: Vercel serverless `/api/chat.js`, модель MiniMax (M2-her).
+**Личный помощник Евгения** — виджет в правом нижнем углу. Отвечает на вопросы об услугах, ценах и подсказывает, как связаться (Telegram @E_Berest). Бэкенд: Vercel serverless `/api/chat.js`, модель OpenAI (gpt-4o-mini).
 
-**Чтобы чат работал на Vercel:** в настройках проекта добавь переменную окружения `MINIMAX_API_KEY` (ключ с [platform.minimax.io](https://platform.minimax.io)).
+**Чтобы чат работал на Vercel:** в настройках проекта добавь переменную окружения `OPENAI_API_KEY` (ключ с [platform.openai.com](https://platform.openai.com/api-keys)).
 
 ## Repo
 
