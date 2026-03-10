@@ -79,7 +79,7 @@
       animation: fadeIn 0.6s ease-out 0.2s forwards;
       opacity: 0;
     }
-    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
     .theme-toggle {
       width: 2.5rem;
       height: 2.5rem;
@@ -183,17 +183,11 @@
       animation: fadeIn 0.6s ease-out 0.1s forwards;
       opacity: 0;
     }
-    .logo-icon {
+    .logo-mark {
       width: 2.25rem;
       height: 2.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 0.5rem;
-      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
-      color: #0a0a0a;
-      font-weight: 700;
-      font-size: 0.875rem;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 12px rgba(0, 255, 240, 0.35));
     }
     .logo-text {
       font-size: 1.125rem;
@@ -203,6 +197,25 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+    }
+    .header-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      background: rgba(0, 255, 240, 0.1);
+      border: 1px solid rgba(0, 255, 240, 0.4);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .header-cta:hover {
+      background: rgba(0, 255, 240, 0.15);
+      border-color: rgba(0, 255, 240, 0.6);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.2);
     }
     /* Hero */
     .hero {
@@ -248,10 +261,12 @@
     }
     .hero-tagline {
       margin: 0 0 1rem;
-      font-size: 1.25rem;
+      font-size: 1rem;
       color: var(--text-muted);
       max-width: 28rem;
+      line-height: 1.6;
     }
+    .hero-tagline-line { display: block; }
     .hero-cta {
       display: inline-flex;
       align-items: center;
@@ -272,29 +287,6 @@
       border-color: rgba(0, 255, 240, 0.6);
       box-shadow: 0 0 20px rgba(0, 255, 240, 0.2);
     }
-    .hero-social {
-      display: flex;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    .hero-social a {
-      width: 2.75rem;
-      height: 2.75rem;
-      border-radius: 50%;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
-    }
-    .hero-social a:hover {
-      color: var(--accent);
-      border-color: rgba(0, 255, 240, 0.5);
-      box-shadow: 0 0 20px rgba(0, 255, 240, 0.4);
-    }
     /* Sections - modern studio style + reveal animation */
     .section { padding: 5rem 0; }
     .section.enter {
@@ -314,6 +306,7 @@
     .section.enter .visitor-count,
     .section.enter .project-item,
     .section.enter .project-card,
+    .section.enter .projects-banner,
     .section.enter .skill-card {
       opacity: 0;
       transform: translateY(20px);
@@ -353,6 +346,9 @@
     }
     .section.enter.visible .project-card:nth-child(4) {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.64s forwards;
+    }
+    .section.enter.visible .projects-banner {
+      animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards;
     }
     .section.enter.visible .skill-card:nth-child(1) {
       animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
@@ -417,18 +413,36 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 1rem;
-      padding: 1.25rem;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      padding: 1.5rem;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
     }
     .skill-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 0 24px rgba(0, 255, 240, 0.08);
+      transform: translateY(-6px) perspective(800px) rotateX(2deg) rotateY(2deg);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25), 0 0 32px rgba(0, 255, 240, 0.12);
+      border-color: rgba(0, 255, 240, 0.2);
     }
-    .skill-card-emoji {
-      display: inline-block;
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
-      line-height: 1;
+    @media (prefers-reduced-motion: reduce) {
+      .skill-card:hover { transform: translateY(-4px); }
+    }
+    .skill-card-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(0, 255, 240, 0.15) 0%, rgba(0, 184, 170, 0.1) 100%);
+      border: 1px solid rgba(0, 255, 240, 0.25);
+      color: var(--accent);
+      font-size: 1.15rem;
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .skill-card:hover .skill-card-icon {
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.25);
+      transform: scale(1.05);
     }
     .skill-card h3 {
       margin: 0 0 0.5rem;
@@ -499,6 +513,56 @@
       pointer-events: none;
     }
     .project-card-placeholder:hover h3 { color: inherit; }
+    .projects-banner {
+      background: linear-gradient(135deg, rgba(0, 255, 240, 0.12) 0%, rgba(0, 184, 170, 0.08) 100%);
+      border: 1px solid rgba(0, 255, 240, 0.25);
+      border-radius: 1.25rem;
+      padding: 2rem;
+      text-align: center;
+      max-width: 36rem;
+      margin: 0 auto;
+      box-shadow: 0 0 40px rgba(0, 255, 240, 0.06);
+    }
+    .projects-banner-icon {
+      font-size: 2.5rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 0 12px rgba(0, 255, 240, 0.3));
+    }
+    .projects-banner h3 {
+      margin: 0 0 0.75rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .projects-banner p {
+      margin: 0 0 1.25rem;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+    .projects-banner .hero-cta { margin-bottom: 0; }
+    .site-footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .site-footer a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      transition: color 0.25s, box-shadow 0.25s;
+    }
+    .site-footer a:hover { color: var(--accent); }
+    .site-footer a i { font-size: 1.125rem; }
     /* Contacts - clean, spacious */
     .contact-lead {
       margin: 0 0 1rem;
@@ -664,10 +728,11 @@
 <body>
   <header class="header">
     <a href="#" class="logo-link">
-      <span class="logo-icon">EB</span>
+      <img src="./assets/logo-ev.svg" alt="EV" class="logo-mark" width="36" height="36">
       <span class="logo-text">Evgeniy B.</span>
     </a>
     <div class="header-actions">
+      <a href="https://t.me/E_Berest" class="header-cta" data-i18n="heroCta" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="heroCta">Обсудить проект</span></a>
       <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">
         <span class="icon-sun" aria-hidden="true"><i class="fas fa-sun"></i></span>
         <span class="icon-moon" aria-hidden="true"><i class="fas fa-moon"></i></span>
@@ -690,105 +755,80 @@
       </div>
       <div class="hero-content">
         <h1>Evgeniy Berestenko</h1>
-        <p class="hero-tagline" data-i18n="tagline">In crypto since 2017. Since 2025: vibecoding, agents, automation - less noise, more result.</p>
-        <a href="https://t.me/E_Berest" class="hero-cta" data-i18n="heroCta" target="_blank" rel="noopener noreferrer">DM me on Telegram</a>
-        <div class="hero-social">
-          <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-          <a href="https://t.me/E_Berest" aria-label="Telegram" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i></a>
-          <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        </div>
+        <p class="hero-tagline">
+          <span class="hero-tagline-line" data-i18n="tagline1">с 2017 - в крипторынке, портфельные инвестиции.</span>
+          <span class="hero-tagline-line" data-i18n="tagline2">с 2020 - в web3, DeFi.</span>
+          <span class="hero-tagline-line" data-i18n="tagline3">с 2025 - vibecoding, агенты, автоматизация - меньше шума, больше результата.</span>
+        </p>
+        <a href="https://t.me/E_Berest" class="hero-cta" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="heroCta">Обсудить проект</span></a>
       </div>
     </section>
 
     <section class="section enter" id="about">
       <p class="section-label" data-i18n="aboutLabel">About</p>
       <h2 class="section-title" data-i18n="aboutTitle">A bit about me</h2>
-      <p class="about-text" data-i18n-html="aboutText">I make technology work for people, not the other way around: crypto without sectarianism, AI without magic fog, and automation without drowning in docs.</p>
+      <p class="about-text" data-i18n-html="aboutText">По-прежнему в крипторынке: сейчас с командой делаю свой проект в DeFi. Параллельно сильно увлекает вайбкодинг и внедрение AI-агентов - очень новая и интересная ниша, где можно сразу приносить пользу.</p>
     </section>
 
     <section class="section enter" id="skills">
       <p class="section-label" data-i18n="skillsLabel">Skills</p>
-      <h2 class="section-title" data-i18n="skillsTitle">My skills</h2>
+      <h2 class="section-title" data-i18n="skillsTitle">Мои навыки</h2>
       <div class="skills-grid">
         <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🪙</span>
-          <h3 data-i18n="skill1Title">Crypto</h3>
-          <p class="skill-card-desc" data-i18n="skill1Desc">In crypto since 2017: tokenomics, DeFi, launching and growing communities, supporting investors and users.</p>
+          <div class="skill-card-icon"><i class="fas fa-bolt" aria-hidden="true"></i></div>
+          <h3 data-i18n="skill1Title">Вайбкодинг</h3>
+          <p class="skill-card-desc" data-i18n="skill1Desc">Быстро помогу собрать MVP вашего сервиса/проекта, чтобы протестировать гипотезу не за месяцы, а за дни.</p>
         </div>
         <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🤖</span>
-          <h3 data-i18n="skill2Title">AI & ML</h3>
-          <p class="skill-card-desc" data-i18n="skill2Desc">Building agents and integrations that take over routine: support, data collection, basic research.</p>
+          <div class="skill-card-icon"><i class="fas fa-robot" aria-hidden="true"></i></div>
+          <h3 data-i18n="skill2Title">AI и ML</h3>
+          <p class="skill-card-desc" data-i18n="skill2Desc">Помогу создать и интегрировать AI агентов - и вы забудете про рутину: саппорт, сбор данных, базовые ресёрчи.</p>
         </div>
         <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">⚡</span>
-          <h3 data-i18n="skill3Title">Vibecoding</h3>
-          <p class="skill-card-desc" data-i18n="skill3Desc">Fast MVPs and frontends to validate hypotheses in days, not months.</p>
+          <div class="skill-card-icon"><i class="fas fa-bullseye" aria-hidden="true"></i></div>
+          <h3 data-i18n="skill3Title">Product & UX thinking</h3>
+          <p class="skill-card-desc" data-i18n="skill3Desc">Проектирую путь пользователя, интерфейсы и тексты так, чтобы продукт был понятен, удобен и вызывал доверие с первого касания.</p>
         </div>
         <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🔧</span>
-          <h3 data-i18n="skill4Title">Automation</h3>
-          <p class="skill-card-desc" data-i18n="skill4Desc">Connecting services, scripts, and no-code flows so the business spends less time on manual work.</p>
+          <div class="skill-card-icon"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
+          <h3 data-i18n="skill4Title">Крипто</h3>
+          <p class="skill-card-desc" data-i18n="skill4Desc">Анализ проектов, токенов, токеномики, составление инвест-портфеля.</p>
         </div>
         <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">👥</span>
-          <h3 data-i18n="skill5Title">Community</h3>
-          <p class="skill-card-desc" data-i18n="skill5Desc">Building warm communities around products: support, moderation, feedback, tone.</p>
+          <div class="skill-card-icon"><i class="fas fa-cogs" aria-hidden="true"></i></div>
+          <h3 data-i18n="skill5Title">Автоматизация</h3>
+          <p class="skill-card-desc" data-i18n="skill5Desc">Связываю сервисы, пишу скрипты и no-code сценарии, чтобы бизнес меньше жёг время на ручные процессы.</p>
         </div>
         <div class="skill-card">
-          <span class="skill-card-emoji" aria-hidden="true">🎯</span>
-          <h3 data-i18n="skill6Title">Product & UX thinking</h3>
-          <p class="skill-card-desc" data-i18n="skill6Desc">Designing user journey, interfaces and copy so the product is clear, easy to use and builds trust from first touch.</p>
+          <div class="skill-card-icon"><i class="fas fa-users" aria-hidden="true"></i></div>
+          <h3 data-i18n="skill6Title">Комьюнити</h3>
+          <p class="skill-card-desc" data-i18n="skill6Desc">Помогаю строить тёплые комьюнити вокруг продукта: саппорт, модерация, обратная связь, тон коммуникации.</p>
         </div>
       </div>
     </section>
 
     <section class="section enter" id="projects">
       <p class="section-label" data-i18n="workLabel">Work</p>
-      <h2 class="section-title" data-i18n="projectsTitle">Projects</h2>
-      <div class="projects-grid">
-        <a href="#" class="project-card">
-          <div class="project-card-image img-1"><i class="fas fa-robot" aria-hidden="true"></i></div>
-          <div class="project-card-body">
-            <h3 data-i18n="project1Title">AI Agent Replay Community</h3>
-            <p class="project-card-desc" data-i18n="project1Desc">Set up a bot and flows for a crypto project community: automatic notifications, FAQ, spam filtering. Support is lighter, replies are faster, and the team has less manual routine.</p>
-          </div>
-        </a>
-        <div class="project-card project-card-placeholder">
-          <div class="project-card-image img-2"><i class="fas fa-chart-line" aria-hidden="true"></i></div>
-          <div class="project-card-body">
-            <h3 data-i18n="project2Title">Coming soon</h3>
-            <p class="project-card-desc" data-i18n="project2Desc">New projects and case studies will be added soon.</p>
-          </div>
-        </div>
-        <div class="project-card project-card-placeholder">
-          <div class="project-card-image img-3"><i class="fas fa-bolt" aria-hidden="true"></i></div>
-          <div class="project-card-body">
-            <h3 data-i18n="project3Title">Coming soon</h3>
-            <p class="project-card-desc" data-i18n="project3Desc">New projects and case studies will be added soon.</p>
-          </div>
-        </div>
-        <div class="project-card project-card-placeholder">
-          <div class="project-card-image img-4"><i class="fas fa-code" aria-hidden="true"></i></div>
-          <div class="project-card-body">
-            <h3 data-i18n="project4Title">Coming soon</h3>
-            <p class="project-card-desc" data-i18n="project4Desc">New projects and case studies will be added soon.</p>
-          </div>
-        </div>
+      <h2 class="section-title" data-i18n="projectsTitle">Проекты</h2>
+      <div class="projects-banner">
+        <div class="projects-banner-icon"><i class="fas fa-rocket" aria-hidden="true"></i></div>
+        <h3 data-i18n="projectsBannerTitle">Кейсов для клиентов пока нет - ваш может стать первым</h3>
+        <p data-i18n="projectsBannerDesc">За плечами опыт в крипте, DeFi, вайбкодинге и автоматизации. Готов помочь с вашим продуктом и сделать всё по комфортной цене - без переплат за «портфолио».</p>
+        <a href="https://t.me/E_Berest" class="hero-cta" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="heroCta">Обсудить проект</span></a>
       </div>
     </section>
 
     <section class="section enter" id="contacts">
-      <p class="section-label" data-i18n="contactsLabel">Get in touch</p>
-      <h2 class="section-title" data-i18n="contactsTitle">Contacts</h2>
-      <p class="contact-lead" data-i18n="contactLead">Open to collaboration: crypto projects, AI products, process automation, and consulting.</p>
+      <p class="section-label" data-i18n="contactsLabel">Связаться</p>
+      <h2 class="section-title" data-i18n="contactsTitle">Контакты</h2>
+      <p class="contact-lead" data-i18n="contactLead">Открыт к сотрудничеству: криптопроекты, AI-продукты, автоматизация процессов и консалтинг.</p>
       <div class="contact-telegram-block">
-        <a href="https://t.me/E_Berest" class="contact-telegram-cta" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="heroCta">DM me on Telegram</span></a>
-        <span class="contact-telegram-tagline" data-i18n="contactTelegramTagline">Write on Telegram - I reply to the point, no fluff.</span>
+        <a href="https://t.me/E_Berest" class="contact-telegram-cta" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="heroCta">Обсудить проект</span></a>
+        <span class="contact-telegram-tagline" data-i18n="contactTelegramTagline">Пишите в Telegram - отвечаю по делу, без воды.</span>
       </div>
       <div class="contact-buttons">
-        <a href="https://t.me/E_Berest" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> Telegram</a>
-        <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+        <a href="https://t.me/nalegkebtc" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="footerTelegram">Мой Телеграм канал</span> @nalegkebtc</a>
+        <a href="https://www.instagram.com/evgeniy_berest?igsh=eDYxOXE5ODA3dnRh&utm_source=qr" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i> <span data-i18n="footerInstagram">Мой Инстаграм</span></a>
       </div>
       <div class="contact-form-wrap">
         <h3 class="form-title" data-i18n="formTitle" style="font-size:1.125rem; margin:0 0 1rem; color: var(--text);">Write to me</h3>
@@ -812,6 +852,10 @@
         </form>
       </div>
       <p class="visitor-count" id="visitor-count" aria-live="polite"></p>
+      <footer class="site-footer">
+        <a href="https://t.me/nalegkebtc" target="_blank" rel="noopener noreferrer" aria-label="Telegram channel"><i class="fab fa-telegram-plane"></i> <span data-i18n="footerTelegram">Мой Телеграм канал</span> @nalegkebtc</a>
+        <a href="https://www.instagram.com/evgeniy_berest?igsh=eDYxOXE5ODA3dnRh&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i> <span data-i18n="footerInstagram">Мой Инстаграм</span></a>
+      </footer>
     </section>
   </main>
 
@@ -819,39 +863,38 @@
     (function() {
       var translations = {
         en: {
-          tagline: 'In crypto since 2017. Since 2025: vibecoding, agents, automation - less noise, more result.',
+          tagline: 'Since 2017 in crypto. Since 2025: vibecoding, agents, automation - less noise, more result.',
+          tagline1: 'since 2017 - in crypto, portfolio investing.',
+          tagline2: 'since 2020 - in web3, DeFi.',
+          tagline3: 'since 2025 - vibecoding, agents, automation - less noise, more result.',
           aboutLabel: 'About',
           aboutTitle: 'A bit about me',
-          aboutText: 'I make technology work for people, not the other way around: crypto without sectarianism, AI without magic fog, and automation without drowning in docs.',
-          heroCta: 'DM me on Telegram',
+          aboutText: 'Still in crypto: currently building my own DeFi project with a team. I\'m also deep into vibecoding and AI agents - a new, exciting space where I can deliver real value.',
+          heroCta: 'Discuss project',
           skillsLabel: 'Skills',
           skillsTitle: 'My skills',
-          skill1Title: 'Crypto',
-          skill1Desc: 'In crypto since 2017: tokenomics, DeFi, launching and growing communities, supporting investors and users.',
+          skill1Title: 'Vibecoding',
+          skill1Desc: 'I\'ll help you ship an MVP fast so you can test your hypothesis in days, not months.',
           skill2Title: 'AI & ML',
-          skill2Desc: 'Building agents and integrations that take over routine: support, data collection, basic research.',
-          skill3Title: 'Vibecoding',
-          skill3Desc: 'Fast MVPs and frontends to validate hypotheses in days, not months.',
-          skill4Title: 'Automation',
-          skill4Desc: 'Connecting services, scripts, and no-code flows so the business spends less time on manual work.',
-          skill5Title: 'Community',
-          skill5Desc: 'Building warm communities around products: support, moderation, feedback, tone.',
-          skill6Title: 'Product & UX thinking',
-          skill6Desc: 'Designing user journey, interfaces and copy so the product is clear, easy to use and builds trust from first touch.',
+          skill2Desc: 'Create and integrate AI agents so you can forget routine: support, data collection, basic research.',
+          skill3Title: 'Product & UX thinking',
+          skill3Desc: 'I design user journey, interfaces and copy so the product is clear, easy to use and builds trust from first touch.',
+          skill4Title: 'Crypto',
+          skill4Desc: 'Project and token analysis, tokenomics, building investment portfolios.',
+          skill5Title: 'Automation',
+          skill5Desc: 'Connect services, scripts and no-code flows so the business spends less time on manual work.',
+          skill6Title: 'Community',
+          skill6Desc: 'Building warm communities around products: support, moderation, feedback, tone of voice.',
           workLabel: 'Work',
           projectsTitle: 'Projects',
-          project1Title: 'AI Agent Replay Community',
-          project1Desc: 'Set up a bot and flows for a crypto project community: automatic notifications, FAQ, spam filtering. Support is lighter, replies are faster, and the team has less manual routine.',
-          project2Title: 'Coming soon',
-          project2Desc: 'New projects and case studies will be added soon.',
-          project3Title: 'Coming soon',
-          project3Desc: 'New projects and case studies will be added soon.',
-          project4Title: 'Coming soon',
-          project4Desc: 'New projects and case studies will be added soon.',
+          projectsBannerTitle: 'No client case studies yet - yours could be the first',
+          projectsBannerDesc: 'I bring experience in crypto, DeFi, vibecoding and automation. Happy to help with your product at a fair price - no portfolio markup.',
           contactsLabel: 'Get in touch',
           contactsTitle: 'Contacts',
           contactLead: 'Open to collaboration: crypto projects, AI products, process automation, and consulting.',
           contactTelegramTagline: 'Write on Telegram - I reply to the point, no fluff.',
+          footerTelegram: 'My Telegram channel',
+          footerInstagram: 'My Instagram',
           formTitle: 'Write to me',
           formName: 'Name',
           formNamePlaceholder: 'Your name',
@@ -867,39 +910,38 @@
           visitorSuffix: 'visitor'
         },
         es: {
-          tagline: 'En crypto desde 2017. Desde 2025: vibecoding, agentes, automatización - menos ruido, más resultado.',
+          tagline: 'Desde 2017 en crypto. Desde 2025: vibecoding, agentes, automatización - menos ruido, más resultado.',
+          tagline1: 'desde 2017 - en crypto, inversión en cartera.',
+          tagline2: 'desde 2020 - en web3, DeFi.',
+          tagline3: 'desde 2025 - vibecoding, agentes, automatización - menos ruido, más resultado.',
           aboutLabel: 'Sobre mí',
           aboutTitle: 'Un poco sobre mí',
-          aboutText: 'Hago que la tecnología trabaje para las personas, y no al revés: crypto sin sectarismo, AI sin niebla mágica y automatización sin ahogarse en documentación.',
-          heroCta: 'Escríbeme por Telegram',
+          aboutText: 'Sigo en crypto: ahora con un equipo desarrollo mi propio proyecto en DeFi. Me apasiona el vibecoding y los agentes de IA - un espacio nuevo e interesante donde aportar valor.',
+          heroCta: 'Hablar del proyecto',
           skillsLabel: 'Habilidades',
           skillsTitle: 'Mis habilidades',
-          skill1Title: 'Crypto',
-          skill1Desc: 'En crypto desde 2017: tokenómica, DeFi, lanzamiento y crecimiento de comunidades, soporte a inversores y usuarios.',
+          skill1Title: 'Vibecoding',
+          skill1Desc: 'Ayudo a montar un MVP rápido para validar la hipótesis en días, no meses.',
           skill2Title: 'AI y ML',
-          skill2Desc: 'Construyo agentes e integraciones que asumen la rutina: soporte, recopilación de datos, investigación básica.',
-          skill3Title: 'Vibecoding',
-          skill3Desc: 'MVPs y frontends rápidos para validar hipótesis en días, no meses.',
-          skill4Title: 'Automatización',
-          skill4Desc: 'Conecto servicios, scripts y flujos no-code para que el negocio pierda menos tiempo en trabajo manual.',
-          skill5Title: 'Comunidad',
-          skill5Desc: 'Construyo comunidades cálidas alrededor de productos: soporte, moderación, feedback, tono.',
-          skill6Title: 'Producto y UX',
-          skill6Desc: 'Diseño el recorrido del usuario, interfaces y textos para que el producto sea claro, cómodo y genere confianza desde el primer contacto.',
+          skill2Desc: 'Crear e integrar agentes de IA para olvidar la rutina: soporte, datos, research básico.',
+          skill3Title: 'Producto y UX',
+          skill3Desc: 'Diseño el recorrido del usuario, interfaces y textos para que el producto sea claro, cómodo y genere confianza desde el primer contacto.',
+          skill4Title: 'Crypto',
+          skill4Desc: 'Análisis de proyectos, tokens, tokenómica, composición de carteras de inversión.',
+          skill5Title: 'Automatización',
+          skill5Desc: 'Conecto servicios, scripts y flujos no-code para que el negocio pierda menos tiempo en trabajo manual.',
+          skill6Title: 'Comunidad',
+          skill6Desc: 'Construyo comunidades cálidas alrededor de productos: soporte, moderación, feedback, tono.',
           workLabel: 'Trabajo',
           projectsTitle: 'Proyectos',
-          project1Title: 'AI Agent Replay Community',
-          project1Desc: 'Configuré un bot y flujos para la comunidad de un proyecto crypto: notificaciones automáticas, FAQ, filtrado de spam. Menos carga de soporte, respuestas más rápidas y menos rutina manual para el equipo.',
-          project2Title: 'Próximamente',
-          project2Desc: 'Nuevos proyectos y casos de estudio se añadirán pronto.',
-          project3Title: 'Próximamente',
-          project3Desc: 'Nuevos proyectos y casos de estudio se añadirán pronto.',
-          project4Title: 'Próximamente',
-          project4Desc: 'Nuevos proyectos y casos de estudio se añadirán pronto.',
+          projectsBannerTitle: 'Aún no hay casos de clientes - el tuyo puede ser el primero',
+          projectsBannerDesc: 'Experiencia en crypto, DeFi, vibecoding y automatización. Dispuesto a ayudar con tu producto a un precio justo.',
           contactsLabel: 'Contacto',
           contactsTitle: 'Contactos',
           contactLead: 'Abierto a colaboración: proyectos crypto, productos AI, automatización de procesos y consultoría.',
           contactTelegramTagline: 'Escribe por Telegram - respondo al grano, sin relleno.',
+          footerTelegram: 'Mi canal de Telegram',
+          footerInstagram: 'Mi Instagram',
           formTitle: 'Escríbeme',
           formName: 'Nombre',
           formNamePlaceholder: 'Tu nombre',
@@ -916,38 +958,37 @@
         },
         ru: {
           tagline: 'С 2017 в крипте. С 2025: vibecoding, агенты, автоматизация - меньше шума, больше результата.',
+          tagline1: 'с 2017 - в крипторынке, портфельные инвестиции.',
+          tagline2: 'с 2020 - в web3, DeFi.',
+          tagline3: 'с 2025 - vibecoding, агенты, автоматизация - меньше шума, больше результата.',
           aboutLabel: 'Обо мне',
           aboutTitle: 'Немного обо мне',
-          aboutText: 'Делаю так, чтобы технологии работали на людей, а не наоборот: крипта без сектантства, AI без магического тумана и автоматизация без перелопачивания документации.',
-          heroCta: 'Написать в Telegram',
+          aboutText: 'По-прежнему в крипторынке: сейчас с командой делаю свой проект в DeFi. Параллельно сильно увлекает вайбкодинг и внедрение AI-агентов - очень новая и интересная ниша, где можно сразу приносить пользу.',
+          heroCta: 'Обсудить проект',
           skillsLabel: 'Навыки',
           skillsTitle: 'Мои навыки',
-          skill1Title: 'Крипто',
-          skill1Desc: 'В крипте с 2017: токеномика, DeFi, запуск и рост комьюнити, поддержка инвесторов и пользователей.',
+          skill1Title: 'Вайбкодинг',
+          skill1Desc: 'Быстро помогу собрать MVP вашего сервиса/проекта, чтобы протестировать гипотезу не за месяцы, а за дни.',
           skill2Title: 'AI и ML',
-          skill2Desc: 'Строю агентов и интеграции, которые берут на себя рутину: саппорт, сбор данных, базовые ресёрчи.',
-          skill3Title: 'Вайбкодинг',
-          skill3Desc: 'Быстро собираю MVP и фронтенд, чтобы проверить гипотезу не за месяцы, а за дни.',
-          skill4Title: 'Автоматизация',
-          skill4Desc: 'Связываю сервисы, пишу скрипты и no-code сценарии, чтобы бизнес меньше жёг время на ручные процессы.',
-          skill5Title: 'Комьюнити',
-          skill5Desc: 'Помогаю строить тёплые комьюнити вокруг продукта: саппорт, модерация, обратная связь, тон коммуникации.',
-          skill6Title: 'Product & UX thinking',
-          skill6Desc: 'Проектирую путь пользователя, интерфейсы и тексты так, чтобы продукт был понятен, удобен и вызывал доверие с первого касания.',
+          skill2Desc: 'Помогу создать и интегрировать AI агентов - и вы забудете про рутину: саппорт, сбор данных, базовые ресёрчи.',
+          skill3Title: 'Product & UX thinking',
+          skill3Desc: 'Проектирую путь пользователя, интерфейсы и тексты так, чтобы продукт был понятен, удобен и вызывал доверие с первого касания.',
+          skill4Title: 'Крипто',
+          skill4Desc: 'Анализ проектов, токенов, токеномики, составление инвест-портфеля.',
+          skill5Title: 'Автоматизация',
+          skill5Desc: 'Связываю сервисы, пишу скрипты и no-code сценарии, чтобы бизнес меньше жёг время на ручные процессы.',
+          skill6Title: 'Комьюнити',
+          skill6Desc: 'Помогаю строить тёплые комьюнити вокруг продукта: саппорт, модерация, обратная связь, тон коммуникации.',
           workLabel: 'Работы',
           projectsTitle: 'Проекты',
-          project1Title: 'AI Agent Replay Community',
-          project1Desc: 'Настроил бота и сценарии для комьюнити крипто-проекта: автоматические уведомления, FAQ, фильтрация спама. В итоге саппорт-разгрузка, быстрее ответы и меньше ручной рутины для команды.',
-          project2Title: 'Скоро',
-          project2Desc: 'Скоро появятся новые проекты и кейсы.',
-          project3Title: 'Скоро',
-          project3Desc: 'Скоро появятся новые проекты и кейсы.',
-          project4Title: 'Скоро',
-          project4Desc: 'Скоро появятся новые проекты и кейсы.',
+          projectsBannerTitle: 'Кейсов для клиентов пока нет - ваш может стать первым',
+          projectsBannerDesc: 'За плечами опыт в крипте, DeFi, вайбкодинге и автоматизации. Готов помочь с вашим продуктом и сделать всё по комфортной цене - без переплат за «портфолио».',
           contactsLabel: 'Связаться',
           contactsTitle: 'Контакты',
-          contactLead: 'Открыт к сотрудничеству: криптопроекты, AI‑продукты, автоматизация процессов и консалтинг.',
-          contactTelegramTagline: 'Пишите в Telegram - отвечаю по делу и без воды.',
+          contactLead: 'Открыт к сотрудничеству: криптопроекты, AI-продукты, автоматизация процессов и консалтинг.',
+          contactTelegramTagline: 'Пишите в Telegram - отвечаю по делу, без воды.',
+          footerTelegram: 'Мой Телеграм канал',
+          footerInstagram: 'Мой Инстаграм',
           formTitle: 'Написать мне',
           formName: 'Имя',
           formNamePlaceholder: 'Ваше имя',

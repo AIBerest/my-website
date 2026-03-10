@@ -1,0 +1,19 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="EV monogram">
+  <defs>
+    <linearGradient id="evGrad" x1="16" y1="16" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFF0"/>
+      <stop offset="1" stop-color="#00B8AA"/>
+    </linearGradient>
+    <filter id="evGlow" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="2.8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect x="8" y="8" width="112" height="112" rx="24" stroke="url(#evGrad)" stroke-opacity="0.35"/>
+  <path d="M32 36H86M32 64H74M32 92H86" stroke="url(#evGrad)" stroke-width="10" stroke-linecap="square" filter="url(#evGlow)"/>
+  <path d="M68 36L100 92H88L56 36H68Z" fill="url(#evGrad)" filter="url(#evGlow)"/>
+  <circle cx="100" cy="28" r="6" fill="url(#evGrad)"/>
+</svg>
