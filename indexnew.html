@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Evgeniy Berestenko - crypto, DeFi, vibecoding, AI agents and automation.">
+  <meta name="theme-color" content="#0a0a0a" id="meta-theme-color">
+  <title>Evgeniy Berestenko</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('site-theme');
+      var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      var meta = document.getElementById('meta-theme-color');
+      if (meta) meta.content = theme === 'light' ? '#f5f5f5' : '#0a0a0a';
+    })();
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    :root {
+      --bg: #0a0a0a;
+      --bg-gradient:
+        radial-gradient(ellipse 90% 60% at 12% 12%, rgba(0, 255, 240, 0.15) 0%, transparent 56%),
+        radial-gradient(ellipse 100% 65% at 88% 78%, rgba(0, 184, 170, 0.14) 0%, transparent 58%),
+        radial-gradient(ellipse 120% 75% at 55% 100%, rgba(0, 255, 240, 0.08) 0%, transparent 48%),
+        linear-gradient(162deg, #090b0f 0%, #0c0f14 30%, #10151a 58%, #0b1014 100%);
+      --text: #e5e5e5;
+      --text-muted: #9ca3af;
+      --card-bg: rgba(255, 255, 255, 0.035);
+      --card-border: rgba(255, 255, 255, 0.11);
+      --accent: #00fff0;
+      --accent-dim: #00b8aa;
+      --input-bg: rgba(255, 255, 255, 0.04);
+      --input-border: rgba(255, 255, 255, 0.14);
+    }
+    [data-theme="light"] {
+      --bg: #f5f8fb;
+      --bg-gradient:
+        radial-gradient(ellipse 90% 60% at 20% 12%, rgba(13, 148, 136, 0.2) 0%, transparent 56%),
+        radial-gradient(ellipse 80% 60% at 80% 75%, rgba(15, 118, 110, 0.16) 0%, transparent 60%),
+        linear-gradient(165deg, #f8fafc 0%, #f1f5f9 45%, #e2e8f0 100%);
+      --text: #0f172a;
+      --text-muted: #475569;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(15, 23, 42, 0.1);
+      --accent: #0d9488;
+      --accent-dim: #0f766e;
+      --input-bg: #fff;
+      --input-border: rgba(15, 23, 42, 0.15);
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text);
+      background: var(--bg-gradient);
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.4s ease, color 0.3s ease;
+    }
+    .page {
+      max-width: 62rem;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+      position: relative;
+    }
+    .page::before,
+    .page::after {
+      content: '';
+      position: fixed;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: -1;
+      opacity: 0.35;
+    }
+    .page::before {
+      top: -60px;
+      left: -120px;
+      background: radial-gradient(circle, rgba(0, 255, 240, 0.42) 0%, rgba(0, 255, 240, 0) 70%);
+    }
+    .page::after {
+      bottom: -120px;
+      right: -120px;
+      background: radial-gradient(circle, rgba(0, 184, 170, 0.45) 0%, rgba(0, 184, 170, 0) 70%);
+    }
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 60;
+      padding: 0.9rem 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(180deg, rgba(8, 10, 12, 0.82), rgba(8, 10, 12, 0.22));
+      backdrop-filter: blur(10px);
+    }
+    [data-theme="light"] .header {
+      background: linear-gradient(180deg, rgba(248, 250, 252, 0.92), rgba(248, 250, 252, 0.45));
+    }
+    .logo-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      text-decoration: none;
+      color: inherit;
+      animation: fadeIn 0.6s ease-out 0.1s forwards;
+      opacity: 0;
+    }
+    .logo-mark {
+      width: 2.5rem;
+      height: 2.5rem;
+      filter: drop-shadow(0 0 16px rgba(0, 255, 240, 0.45));
+    }
+    .logo-text {
+      font-size: 1.06rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(130deg, var(--accent), var(--accent-dim));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .header-actions { display: flex; align-items: center; gap: 0.6rem; }
+    .header-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      text-decoration: none;
+      padding: 0.48rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 240, 0.4);
+      color: var(--accent);
+      background: rgba(0, 255, 240, 0.09);
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: 0.25s ease;
+    }
+    .header-contact:hover {
+      border-color: rgba(0, 255, 240, 0.68);
+      background: rgba(0, 255, 240, 0.16);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.18);
+    }
+    .theme-toggle {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { background: var(--input-bg); border-color: var(--input-border); }
+    .theme-toggle .icon-sun { display: none; }
+    .theme-toggle .icon-moon { display: block; }
+    [data-theme="light"] .theme-toggle .icon-sun { display: block; }
+    [data-theme="light"] .theme-toggle .icon-moon { display: none; }
+
+    .lang-dropdown { position: relative; animation: fadeIn 0.6s ease-out 0.2s forwards; opacity: 0; }
+    .lang-current {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .lang-current:hover { background: var(--input-bg); border-color: var(--input-border); }
+    .lang-current::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text-muted);
+      margin-left: 2px;
+    }
+    .lang-dropdown.open .lang-current::after { transform: scaleY(-1); }
+    .lang-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      min-width: 100%;
+      padding: 4px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+      z-index: 100;
+    }
+    .lang-dropdown.open .lang-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+    .lang-menu button {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 0.85rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text);
+      background: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      transition: background 0.15s, color 0.15s;
+    }
+    .lang-menu button:hover { background: rgba(0, 255, 240, 0.1); color: var(--accent); }
+    .lang-menu button.lang-option.active { color: var(--accent); background: rgba(0, 255, 240, 0.08); }
+
+    .hero {
+      padding-top: 7.3rem;
+      min-height: 75vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2.1rem;
+      position: relative;
+    }
+    @media (min-width: 840px) {
+      .hero {
+        flex-direction: row;
+        align-items: center;
+        gap: 3.2rem;
+      }
+    }
+    .hero-avatar-wrap {
+      flex-shrink: 0;
+      animation: fadeIn 0.6s ease-out 0.2s forwards;
+      opacity: 0;
+      position: relative;
+    }
+    .hero-avatar-wrap::after {
+      content: '';
+      position: absolute;
+      width: 90%;
+      height: 90%;
+      left: 5%;
+      top: 12%;
+      border-radius: 50%;
+      filter: blur(28px);
+      background: radial-gradient(circle, rgba(0, 255, 240, 0.38) 0%, transparent 70%);
+      z-index: -1;
+    }
+    .hero-avatar {
+      width: 10.2rem;
+      height: 10.2rem;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(0, 184, 170, 0.42);
+      box-shadow: 0 0 34px rgba(0, 255, 240, 0.24);
+      transition: box-shadow 0.25s ease;
+    }
+    .hero-avatar:hover { box-shadow: 0 0 46px rgba(0, 255, 240, 0.35); }
+    @media (min-width: 768px) {
+      .hero-avatar { width: 13.6rem; height: 13.6rem; }
+    }
+    .hero-content { animation: fadeInUp 0.6s ease-out 0.35s forwards; opacity: 0; }
+    .hero h1 {
+      margin: 0 0 0.45rem;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.03em;
+    }
+    @media (min-width: 768px) {
+      .hero h1 { font-size: 3.15rem; }
+    }
+    .hero-tagline {
+      margin: 0 0 1.1rem;
+      max-width: 38rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+    .hero-tagline-line {
+      position: relative;
+      padding-left: 1rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      font-size: 1rem;
+    }
+    .hero-tagline-line::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.62rem;
+      width: 0.45rem;
+      height: 0.45rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+      box-shadow: 0 0 10px rgba(0, 255, 240, 0.45);
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.52rem;
+      padding: 0.72rem 1.35rem;
+      border-radius: 100px;
+      background: rgba(0, 255, 240, 0.1);
+      border: 1px solid rgba(0, 255, 240, 0.44);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+    }
+    .hero-cta:hover {
+      background: rgba(0, 255, 240, 0.16);
+      border-color: rgba(0, 255, 240, 0.64);
+      box-shadow: 0 0 24px rgba(0, 255, 240, 0.26);
+      transform: translateY(-1px);
+    }
+
+    .section { padding: 4.8rem 0; }
+    .section.enter { opacity: 0; transform: translateY(40px) scale(0.98); }
+    .section.enter.visible { animation: sectionReveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .section.enter .section-label,
+    .section.enter .section-title,
+    .section.enter .about-text,
+    .section.enter .contact-lead,
+    .section.enter .contact-telegram-block,
+    .section.enter .social-links-bottom,
+    .section.enter .contact-form-wrap,
+    .section.enter .visitor-count,
+    .section.enter .projects-banner,
+    .section.enter .skill-card { opacity: 0; transform: translateY(20px); }
+    .section.enter.visible .section-label { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.12s forwards; }
+    .section.enter.visible .section-title { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.24s forwards; }
+    .section.enter.visible .about-text { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards; }
+    .section.enter.visible .projects-banner { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards; }
+    .section.enter.visible .contact-lead { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards; }
+    .section.enter.visible .contact-telegram-block { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards; }
+    .section.enter.visible .social-links-bottom { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.52s forwards; }
+    .section.enter.visible .contact-form-wrap { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards; }
+    .section.enter.visible .visitor-count { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.68s forwards; }
+    .section.enter.visible .skill-card:nth-child(1) { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards; }
+    .section.enter.visible .skill-card:nth-child(2) { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.22s forwards; }
+    .section.enter.visible .skill-card:nth-child(3) { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s forwards; }
+    .section.enter.visible .skill-card:nth-child(4) { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.37s forwards; }
+    .section.enter.visible .skill-card:nth-child(5) { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.45s forwards; }
+    .section.enter.visible .skill-card:nth-child(6) { animation: itemReveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.53s forwards; }
+
+    .section-label {
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-dim);
+      margin: 0 0 0.72rem;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin: 0 0 2.3rem;
+      color: var(--text);
+    }
+    @media (min-width: 768px) {
+      .section-title { font-size: 2.45rem; margin-bottom: 2.8rem; }
+    }
+    .about-text {
+      max-width: 42rem;
+      margin: 0;
+      font-size: 1.12rem;
+      line-height: 1.8;
+      color: var(--text);
+      opacity: 0.92;
+    }
+    .about-text strong { color: var(--accent); font-weight: 600; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.2rem;
+    }
+    @media (min-width: 640px) {
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 940px) {
+      .skills-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .skill-card {
+      position: relative;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.2rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+      overflow: hidden;
+    }
+    [data-theme="light"] .skill-card {
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.95), rgba(241, 245, 249, 0.8));
+    }
+    .skill-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(0, 255, 240, 0.12), transparent 55%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+    .skill-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 255, 240, 0.4);
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.25), 0 0 30px rgba(0, 255, 240, 0.12);
+    }
+    .skill-card:hover::after { opacity: 1; }
+    .skill-icon {
+      width: 2.35rem;
+      height: 2.35rem;
+      margin-bottom: 0.88rem;
+      padding: 0.42rem;
+      border-radius: 0.68rem;
+      border: 1px solid rgba(0, 255, 240, 0.3);
+      background: rgba(0, 255, 240, 0.08);
+      color: var(--accent);
+    }
+    .skill-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .skill-card h3 {
+      margin: 0 0 0.48rem;
+      font-size: 1.06rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .skill-card-desc {
+      margin: 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .projects-banner {
+      border: 1px solid rgba(0, 255, 240, 0.28);
+      background:
+        radial-gradient(circle at 88% 20%, rgba(0, 255, 240, 0.18), transparent 42%),
+        linear-gradient(145deg, rgba(0, 255, 240, 0.07), rgba(0, 184, 170, 0.1));
+      border-radius: 1.15rem;
+      padding: 1.5rem;
+      box-shadow: 0 0 28px rgba(0, 255, 240, 0.1);
+    }
+    .projects-banner-head {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.95rem;
+    }
+    .projects-banner-icon {
+      width: 2.65rem;
+      height: 2.65rem;
+      border-radius: 0.8rem;
+      border: 1px solid rgba(0, 255, 240, 0.45);
+      background: rgba(0, 255, 240, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+    .projects-banner-icon i { font-size: 1.1rem; }
+    .projects-banner h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+    .projects-banner p {
+      margin: 0 0 1rem;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .projects-offer {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.52rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 240, 0.4);
+      color: var(--accent);
+      background: rgba(0, 255, 240, 0.11);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .contact-lead {
+      margin: 0 0 1rem;
+      font-size: 1.08rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 44rem;
+    }
+    .contact-telegram-block {
+      margin: 0 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.5rem 1rem;
+    }
+    .contact-telegram-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.65rem 1.1rem;
+      border-radius: 100px;
+      background: rgba(0, 255, 240, 0.1);
+      border: 1px solid rgba(0, 255, 240, 0.35);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.94rem;
+      font-weight: 600;
+      transition: background 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+    .contact-telegram-cta:hover {
+      background: rgba(0, 255, 240, 0.16);
+      border-color: rgba(0, 255, 240, 0.55);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.2);
+    }
+    .contact-telegram-tagline {
+      font-size: 0.98rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .social-links-bottom {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.6rem;
+      max-width: 42rem;
+    }
+    @media (min-width: 700px) {
+      .social-links-bottom {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .social-link-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      border-radius: 0.9rem;
+      background: var(--card-bg);
+      padding: 0.78rem 0.95rem;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+    }
+    .social-link-card:hover {
+      border-color: rgba(0, 255, 240, 0.4);
+      box-shadow: 0 0 20px rgba(0, 255, 240, 0.11);
+      transform: translateY(-1px);
+    }
+    .social-link-label {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.89rem;
+      color: var(--text-muted);
+    }
+    .social-link-value {
+      font-size: 0.9rem;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .contact-form-wrap { margin-top: 2.1rem; max-width: 29rem; }
+    .contact-form-wrap .form-row { margin-bottom: 1rem; }
+    .contact-form-wrap label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+    .contact-form-wrap input,
+    .contact-form-wrap textarea {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .contact-form-wrap input:focus,
+    .contact-form-wrap textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(0, 255, 240, 0.15);
+    }
+    .contact-form-wrap input.error,
+    .contact-form-wrap textarea.error { border-color: #dc2626; }
+    .contact-form-wrap textarea { min-height: 120px; resize: vertical; }
+    .contact-form-wrap .form-error {
+      font-size: 0.8125rem;
+      color: #dc2626;
+      margin-top: 0.25rem;
+      display: none;
+    }
+    .contact-form-wrap button[type="submit"] {
+      margin-top: 0.5rem;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      font-family: inherit;
+      color: #061111;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dim));
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .contact-form-wrap button[type="submit"]:hover { opacity: 0.95; transform: translateY(-1px); }
+
+    .visitor-count {
+      margin-top: 2.8rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 760px) {
+      .header { padding: 0.8rem 0.75rem; }
+      .logo-text { display: none; }
+      .header-contact { padding: 0.48rem 0.62rem; font-size: 0.74rem; }
+      .header-contact span { display: none; }
+      .section { padding: 4.1rem 0; }
+      .hero { min-height: auto; }
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes sectionReveal {
+      from { opacity: 0; transform: translateY(40px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes itemReveal {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a href="#hero" class="logo-link" aria-label="Home">
+      <img src="./assets/logo-ev.svg" alt="EV" class="logo-mark">
+      <span class="logo-text">Evgeniy Berestenko</span>
+    </a>
+    <div class="header-actions">
+      <a href="#contacts" class="header-contact" data-i18n="headerCta"><i class="fab fa-telegram-plane"></i> <span>Telegram</span></a>
+      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Toggle dark/light mode">
+        <span class="icon-sun" aria-hidden="true"><i class="fas fa-sun"></i></span>
+        <span class="icon-moon" aria-hidden="true"><i class="fas fa-moon"></i></span>
+      </button>
+      <div class="lang-dropdown" aria-label="Language">
+        <button type="button" class="lang-current" id="lang-current" aria-haspopup="true" aria-expanded="false">En</button>
+        <div class="lang-menu" id="lang-menu" role="menu">
+          <button type="button" role="menuitem" data-lang="en" class="lang-option">En</button>
+          <button type="button" role="menuitem" data-lang="es" class="lang-option">Es</button>
+          <button type="button" role="menuitem" data-lang="ru" class="lang-option">Ru</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero" id="hero">
+      <div class="hero-avatar-wrap">
+        <img src="./assets/avatar.png" alt="Evgeniy Berestenko" class="hero-avatar">
+      </div>
+      <div class="hero-content">
+        <h1>Evgeniy Berestenko</h1>
+        <div class="hero-tagline" data-i18n-html="tagline">
+          <div class="hero-tagline-line">since 2017 - in crypto market, portfolio investments.</div>
+          <div class="hero-tagline-line">since 2020 - in web3, DeFi.</div>
+          <div class="hero-tagline-line">since 2025 - vibecoding, agents, automation - less noise, more result.</div>
+        </div>
+        <a href="https://t.me/E_Berest" class="hero-cta" data-i18n="heroCta" target="_blank" rel="noopener noreferrer">Launch a project in Telegram</a>
+      </div>
+    </section>
+
+    <section class="section enter" id="about">
+      <p class="section-label" data-i18n="aboutLabel">About</p>
+      <h2 class="section-title" data-i18n="aboutTitle">A bit about me</h2>
+      <p class="about-text" data-i18n-html="aboutText">I stay in crypto and now build my own DeFi project with the team. Strong focus today is <strong>vibecoding</strong> and practical AI agents that remove routine. Main principle: less noise, more result.</p>
+    </section>
+
+    <section class="section enter" id="skills">
+      <p class="section-label" data-i18n="skillsLabel">Skills</p>
+      <h2 class="section-title" data-i18n="skillsTitle">My skills</h2>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <span class="skill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M7 8h10"/><path d="M6 16h12"/><circle cx="12" cy="12" r="9"/></svg></span>
+          <h3 data-i18n="skill1Title">Vibecoding</h3>
+          <p class="skill-card-desc" data-i18n="skill1Desc">Fast MVP for product validation in days, not quarters.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 9a4 4 0 1 1 8 0v2"/><path d="M7 13h10"/><path d="M9 17h6"/><rect x="5" y="13" width="14" height="6" rx="2"/></svg></span>
+          <h3 data-i18n="skill2Title">AI & ML</h3>
+          <p class="skill-card-desc" data-i18n="skill2Desc">Agents and AI flows that take repetitive tasks off the team.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16"/><path d="M8 5v14"/><path d="M8 12h12"/><path d="M16 12v7"/></svg></span>
+          <h3 data-i18n="skill3Title">Product & UX thinking</h3>
+          <p class="skill-card-desc" data-i18n="skill3Desc">User path, clear structure and trust from the first touch point.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 15l4-4 3 3 5-5 4 4"/><path d="M4 19h16"/><circle cx="8" cy="11" r="1.2"/><circle cx="16" cy="9" r="1.2"/></svg></span>
+          <h3 data-i18n="skill4Title">Crypto</h3>
+          <p class="skill-card-desc" data-i18n="skill4Desc">Project analysis, tokenomics, token selection and portfolio assembly.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 7h6"/><path d="M13 7h6"/><path d="M5 12h4"/><path d="M11 12h8"/><path d="M5 17h7"/><path d="M14 17h5"/><circle cx="10" cy="7" r="1"/><circle cx="10" cy="12" r="1"/><circle cx="13" cy="17" r="1"/></svg></span>
+          <h3 data-i18n="skill5Title">Automation</h3>
+          <p class="skill-card-desc" data-i18n="skill5Desc">Connecting services, scripts and no-code scenarios into one workflow.</p>
+        </div>
+        <div class="skill-card">
+          <span class="skill-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="2.2"/><circle cx="16" cy="9" r="2.2"/><path d="M4.5 17c.6-2.1 2.2-3.2 4.5-3.2s3.9 1.1 4.5 3.2"/><path d="M10.5 17c.6-2.1 2.2-3.2 4.5-3.2s3.9 1.1 4.5 3.2"/></svg></span>
+          <h3 data-i18n="skill6Title">Community</h3>
+          <p class="skill-card-desc" data-i18n="skill6Desc">Warm communities around products with clear communication and feedback loops.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section enter" id="projects">
+      <p class="section-label" data-i18n="workLabel">Work</p>
+      <h2 class="section-title" data-i18n="projectsTitle">Projects</h2>
+      <div class="projects-banner">
+        <div class="projects-banner-head">
+          <div class="projects-banner-icon"><i class="fas fa-rocket" aria-hidden="true"></i></div>
+          <h3 data-i18n="projectBannerTitle">First case starts here</h3>
+        </div>
+        <p data-i18n="projectBannerDesc">Client case studies are still in progress, but I already have strong crypto and product background, practical AI stack, and process discipline. I am ready to take the first project in a comfortable format and turn it into a measurable result.</p>
+        <div class="projects-offer" data-i18n="projectOffer"><i class="fas fa-bridge" aria-hidden="true"></i> From idea to first public case</div>
+      </div>
+    </section>
+
+    <section class="section enter" id="contacts">
+      <p class="section-label" data-i18n="contactsLabel">Get in touch</p>
+      <h2 class="section-title" data-i18n="contactsTitle">Contacts</h2>
+      <p class="contact-lead" data-i18n="contactLead">Open to collaboration: crypto projects, AI products, and automation systems that reduce manual operations.</p>
+      <div class="contact-telegram-block">
+        <a href="https://t.me/E_Berest" class="contact-telegram-cta" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram-plane"></i> <span data-i18n="heroCta">Launch a project in Telegram</span></a>
+        <span class="contact-telegram-tagline" data-i18n="contactTelegramTagline">Send a message in Telegram and we quickly decide next steps.</span>
+      </div>
+
+      <div class="social-links-bottom">
+        <a href="https://t.me/nalegkebtc" target="_blank" rel="noopener noreferrer" class="social-link-card">
+          <span class="social-link-label"><i class="fab fa-telegram-plane"></i> <span data-i18n="telegramChannelLabel">My Telegram channel</span></span>
+          <span class="social-link-value">@nalegkebtc</span>
+        </a>
+        <a href="https://www.instagram.com/evgeniy_berest" target="_blank" rel="noopener noreferrer" class="social-link-card">
+          <span class="social-link-label"><i class="fab fa-instagram"></i> <span data-i18n="instagramLabel">My Instagram</span></span>
+          <span class="social-link-value">@evgeniy_berest</span>
+        </a>
+      </div>
+
+      <div class="contact-form-wrap">
+        <h3 class="form-title" data-i18n="formTitle" style="font-size:1.125rem; margin:0 0 1rem; color: var(--text);">Write to me</h3>
+        <form id="contact-form" novalidate>
+          <div class="form-row">
+            <label for="form-name" data-i18n="formName">Name</label>
+            <input type="text" id="form-name" name="name" autocomplete="name" data-i18n-placeholder="formNamePlaceholder" placeholder="Your name" />
+            <span class="form-error" id="form-name-error" aria-live="polite"></span>
+          </div>
+          <div class="form-row">
+            <label for="form-email" data-i18n="formEmail">Email</label>
+            <input type="email" id="form-email" name="email" autocomplete="email" data-i18n-placeholder="formEmailPlaceholder" placeholder="your@email.com" />
+            <span class="form-error" id="form-email-error" aria-live="polite"></span>
+          </div>
+          <div class="form-row">
+            <label for="form-message" data-i18n="formMessage">Message</label>
+            <textarea id="form-message" name="message" data-i18n-placeholder="formMessagePlaceholder" placeholder="Your message..." rows="5"></textarea>
+            <span class="form-error" id="form-message-error" aria-live="polite"></span>
+          </div>
+          <button type="submit" data-i18n="formSubmit">Send</button>
+        </form>
+      </div>
+      <p class="visitor-count" id="visitor-count" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <script>
+    (function() {
+      var translations = {
+        en: {
+          tagline: '<div class="hero-tagline-line">since 2017 - in crypto market, portfolio investments.</div><div class="hero-tagline-line">since 2020 - in web3, DeFi.</div><div class="hero-tagline-line">since 2025 - vibecoding, agents, automation - less noise, more result.</div>',
+          headerCta: 'Telegram',
+          heroCta: 'Launch a project in Telegram',
+          aboutLabel: 'About',
+          aboutTitle: 'A bit about me',
+          aboutText: 'I stay in crypto and now build my own DeFi project with the team. Strong focus today is <strong>vibecoding</strong> and practical AI agents that remove routine. Main principle: less noise, more result.',
+          skillsLabel: 'Skills',
+          skillsTitle: 'My skills',
+          skill1Title: 'Vibecoding',
+          skill1Desc: 'Fast MVP for product validation in days, not quarters.',
+          skill2Title: 'AI & ML',
+          skill2Desc: 'Agents and AI flows that take repetitive tasks off the team.',
+          skill3Title: 'Product & UX thinking',
+          skill3Desc: 'User path, clear structure and trust from the first touch point.',
+          skill4Title: 'Crypto',
+          skill4Desc: 'Project analysis, tokenomics, token selection and portfolio assembly.',
+          skill5Title: 'Automation',
+          skill5Desc: 'Connecting services, scripts and no-code scenarios into one workflow.',
+          skill6Title: 'Community',
+          skill6Desc: 'Warm communities around products with clear communication and feedback loops.',
+          workLabel: 'Work',
+          projectsTitle: 'Projects',
+          projectBannerTitle: 'First case starts here',
+          projectBannerDesc: 'Client case studies are still in progress, but I already have strong crypto and product background, practical AI stack, and process discipline. I am ready to take the first project in a comfortable format and turn it into a measurable result.',
+          projectOffer: 'From idea to first public case',
+          contactsLabel: 'Contacts',
+          contactsTitle: 'Get in touch',
+          contactLead: 'Open to collaboration: crypto projects, AI products, and automation systems that reduce manual operations.',
+          contactTelegramTagline: 'Send a message in Telegram and we quickly decide next steps.',
+          telegramChannelLabel: 'My Telegram channel',
+          instagramLabel: 'My Instagram',
+          formTitle: 'Write to me',
+          formName: 'Name',
+          formNamePlaceholder: 'Your name',
+          formEmail: 'Email',
+          formEmailPlaceholder: 'your@email.com',
+          formMessage: 'Message',
+          formMessagePlaceholder: 'Your message...',
+          formSubmit: 'Send',
+          formSuccess: 'Message sent (demo). We will get in touch soon!',
+          formErrorEmail: 'Please enter a valid email address.',
+          formErrorRequired: 'This field is required.',
+          visitorText: 'You are the',
+          visitorSuffix: 'visitor'
+        },
+        es: {
+          tagline: '<div class="hero-tagline-line">desde 2017 - en el mercado crypto, inversión de portafolio.</div><div class="hero-tagline-line">desde 2020 - en web3, DeFi.</div><div class="hero-tagline-line">desde 2025 - vibecoding, agentes y automatización: menos ruido, más resultado.</div>',
+          headerCta: 'Telegram',
+          heroCta: 'Lanzar proyecto en Telegram',
+          aboutLabel: 'Sobre mí',
+          aboutTitle: 'Un poco sobre mí',
+          aboutText: 'Sigo en crypto y ahora, con mi equipo, construyo un proyecto DeFi propio. Hoy me enfoco en <strong>vibecoding</strong> y agentes AI prácticos que quitan rutina. Principio clave: menos ruido, más resultado.',
+          skillsLabel: 'Habilidades',
+          skillsTitle: 'Mis habilidades',
+          skill1Title: 'Vibecoding',
+          skill1Desc: 'MVP rápidos para validar un producto en días, no en trimestres.',
+          skill2Title: 'AI y ML',
+          skill2Desc: 'Agentes y flujos AI que eliminan tareas repetitivas del equipo.',
+          skill3Title: 'Product & UX thinking',
+          skill3Desc: 'Ruta del usuario clara y confianza desde el primer contacto.',
+          skill4Title: 'Crypto',
+          skill4Desc: 'Análisis de proyectos, tokenómica, selección de tokens y armado de portafolios.',
+          skill5Title: 'Automatización',
+          skill5Desc: 'Conexión de servicios, scripts y escenarios no-code en un solo flujo.',
+          skill6Title: 'Comunidad',
+          skill6Desc: 'Comunidades cálidas alrededor del producto con feedback útil.',
+          workLabel: 'Trabajo',
+          projectsTitle: 'Proyectos',
+          projectBannerTitle: 'El primer caso empieza aquí',
+          projectBannerDesc: 'Los casos de clientes todavía están en desarrollo, pero ya tengo base fuerte en crypto y producto, stack práctico de AI y disciplina de procesos. Estoy listo para tomar el primer proyecto en un formato cómodo y convertirlo en resultado medible.',
+          projectOffer: 'De idea a primer caso público',
+          contactsLabel: 'Contacto',
+          contactsTitle: 'Contactos',
+          contactLead: 'Abierto a colaborar en proyectos crypto, productos AI y automatización de procesos.',
+          contactTelegramTagline: 'Escribe por Telegram y definimos rápido los siguientes pasos.',
+          telegramChannelLabel: 'Mi canal de Telegram',
+          instagramLabel: 'Mi Instagram',
+          formTitle: 'Escríbeme',
+          formName: 'Nombre',
+          formNamePlaceholder: 'Tu nombre',
+          formEmail: 'Email',
+          formEmailPlaceholder: 'tu@email.com',
+          formMessage: 'Mensaje',
+          formMessagePlaceholder: 'Tu mensaje...',
+          formSubmit: 'Enviar',
+          formSuccess: 'Mensaje enviado (demo). ¡Nos pondremos en contacto pronto!',
+          formErrorEmail: 'Introduce un email válido.',
+          formErrorRequired: 'Este campo es obligatorio.',
+          visitorText: 'Eres el',
+          visitorSuffix: 'visitante'
+        },
+        ru: {
+          tagline: '<div class="hero-tagline-line">с 2017 - в крипторынке, портфельные инвестиции.</div><div class="hero-tagline-line">с 2020 - в web3, DeFi.</div><div class="hero-tagline-line">с 2025 - vibecoding, агенты, автоматизация - меньше шума, больше результата.</div>',
+          headerCta: 'В Telegram',
+          heroCta: 'Запустить проект в Telegram',
+          aboutLabel: 'Обо мне',
+          aboutTitle: 'Немного о себе',
+          aboutText: 'Я по-прежнему в крипторынке и сейчас вместе с командой делаю свой DeFi-проект. Сильно увлечен <strong>vibecoding</strong> и внедрением AI-агентов, которые снимают рутину. Мой принцип: меньше шума, больше результата.',
+          skillsLabel: 'Навыки',
+          skillsTitle: 'Мои навыки',
+          skill1Title: 'Вайбкодинг',
+          skill1Desc: 'Быстрые MVP, чтобы проверить гипотезу и запустить рабочий прототип за дни.',
+          skill2Title: 'AI и ML',
+          skill2Desc: 'Агенты и AI-сценарии, которые разгружают команду от повторяющихся задач.',
+          skill3Title: 'Product & UX thinking',
+          skill3Desc: 'Путь пользователя, понятная логика продукта и доверие с первого касания.',
+          skill4Title: 'Крипто',
+          skill4Desc: 'Анализ проектов, токенов и токеномики, сборка портфелей под задачу.',
+          skill5Title: 'Автоматизация',
+          skill5Desc: 'Связка сервисов, скриптов и no-code сценариев в единую систему.',
+          skill6Title: 'Комьюнити',
+          skill6Desc: 'Теплые сообщества вокруг продукта с сильной обратной связью.',
+          workLabel: 'Проекты',
+          projectsTitle: 'Проекты',
+          projectBannerTitle: 'Первый кейс начинается здесь',
+          projectBannerDesc: 'Публичных клиентских кейсов пока немного, но у меня уже есть крепкий опыт в крипте и продукте, рабочий AI-стек и понятный процесс. Готов взять первый проект в комфортном формате и довести до измеримого результата.',
+          projectOffer: 'От идеи до первого публичного кейса',
+          contactsLabel: 'Связь',
+          contactsTitle: 'Контакты',
+          contactLead: 'Открыт к сотрудничеству: криптопроекты, AI-продукты и автоматизация процессов, где нужно меньше ручной рутины.',
+          contactTelegramTagline: 'Напишите в Telegram, быстро определим формат и следующий шаг.',
+          telegramChannelLabel: 'Мой Telegram канал',
+          instagramLabel: 'Мой Instagram',
+          formTitle: 'Написать мне',
+          formName: 'Имя',
+          formNamePlaceholder: 'Ваше имя',
+          formEmail: 'Почта',
+          formEmailPlaceholder: 'your@email.com',
+          formMessage: 'Сообщение',
+          formMessagePlaceholder: 'Ваше сообщение...',
+          formSubmit: 'Отправить',
+          formSuccess: 'Сообщение отправлено (демо). Скоро свяжемся!',
+          formErrorEmail: 'Введите корректный email.',
+          formErrorRequired: 'Заполните это поле.',
+          visitorText: 'Вы',
+          visitorSuffix: 'посетитель'
+        }
+      };
+
+      var langLabels = { en: 'En', es: 'Es', ru: 'Ru' };
+
+      function getLang() {
+        var saved = localStorage.getItem('site-lang');
+        return (saved === 'ru' || saved === 'en' || saved === 'es') ? saved : 'ru';
+      }
+
+      function setLang(lang) {
+        localStorage.setItem('site-lang', lang);
+        document.documentElement.lang = lang === 'ru' ? 'ru' : (lang === 'es' ? 'es' : 'en');
+        var meta = document.querySelector('meta[name="description"]');
+        if (meta) {
+          if (lang === 'ru') meta.content = 'Евгений Берестенко - крипто, DeFi, vibecoding, AI-агенты и автоматизация.';
+          else if (lang === 'es') meta.content = 'Evgeniy Berestenko - crypto, DeFi, vibecoding, agentes AI y automatización.';
+          else meta.content = 'Evgeniy Berestenko - crypto, DeFi, vibecoding, AI agents and automation.';
+        }
+
+        var t = translations[lang];
+        document.querySelectorAll('[data-i18n]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n');
+          if (t[key]) el.textContent = t[key];
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n-html');
+          if (t[key]) el.innerHTML = t[key];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(function(el) {
+          var key = el.getAttribute('data-i18n-placeholder');
+          if (t[key]) el.placeholder = t[key];
+        });
+
+        var currentBtn = document.getElementById('lang-current');
+        if (currentBtn) currentBtn.textContent = langLabels[lang] || lang;
+        document.querySelectorAll('.lang-option').forEach(function(btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+        });
+        var dropdown = document.querySelector('.lang-dropdown');
+        if (dropdown) dropdown.classList.remove('open');
+        if (typeof updateVisitorText === 'function') updateVisitorText();
+      }
+
+      function ordinalEn(n) {
+        var d = n % 10;
+        var t = n % 100;
+        if (d === 1 && t !== 11) return n + 'st';
+        if (d === 2 && t !== 12) return n + 'nd';
+        if (d === 3 && t !== 13) return n + 'rd';
+        return n + 'th';
+      }
+      function ordinalEs(n) { return n + '.º'; }
+      function updateVisitorText() {
+        var el = document.getElementById('visitor-count');
+        if (!el) return;
+        var lang = getLang();
+        var n = parseInt(localStorage.getItem('site-visit-count') || '0', 10);
+        var t = translations[lang];
+        var text;
+        if (lang === 'ru') text = (t.visitorText || 'Вы') + ' ' + n + '-ый ' + (t.visitorSuffix || 'посетитель');
+        else if (lang === 'es') text = (t.visitorText || 'Eres el') + ' ' + ordinalEs(n) + ' ' + (t.visitorSuffix || 'visitante');
+        else text = (t.visitorText || 'You are the') + ' ' + ordinalEn(n) + ' ' + (t.visitorSuffix || 'visitor');
+        el.textContent = text;
+      }
+
+      var themeToggle = document.getElementById('theme-toggle');
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+          var html = document.documentElement;
+          var next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+          html.setAttribute('data-theme', next);
+          localStorage.setItem('site-theme', next);
+          var meta = document.getElementById('meta-theme-color');
+          if (meta) meta.content = next === 'light' ? '#f5f5f5' : '#0a0a0a';
+          themeToggle.setAttribute('aria-label', next === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+        });
+      }
+
+      var visitCount = parseInt(localStorage.getItem('site-visit-count') || '0', 10);
+      visitCount += 1;
+      localStorage.setItem('site-visit-count', String(visitCount));
+      updateVisitorText();
+
+      var contactForm = document.getElementById('contact-form');
+      if (contactForm) {
+        function validateEmail(email) {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email || '');
+        }
+        function showError(id, msg) {
+          var el = document.getElementById(id);
+          if (el) {
+            el.textContent = msg;
+            el.style.display = msg ? 'block' : 'none';
+          }
+        }
+        function setInputError(input, hasError) {
+          if (input) input.classList.toggle('error', !!hasError);
+        }
+        contactForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var nameInput = document.getElementById('form-name');
+          var emailInput = document.getElementById('form-email');
+          var messageInput = document.getElementById('form-message');
+          var lang = getLang();
+          var t = translations[lang];
+          var name = (nameInput && nameInput.value || '').trim();
+          var email = (emailInput && emailInput.value || '').trim();
+          var message = (messageInput && messageInput.value || '').trim();
+          showError('form-name-error', '');
+          showError('form-email-error', '');
+          showError('form-message-error', '');
+          setInputError(nameInput, false);
+          setInputError(emailInput, false);
+          setInputError(messageInput, false);
+          var valid = true;
+          if (!name) {
+            showError('form-name-error', t.formErrorRequired || 'This field is required.');
+            setInputError(nameInput, true);
+            valid = false;
+          }
+          if (!email) {
+            showError('form-email-error', t.formErrorRequired || 'This field is required.');
+            setInputError(emailInput, true);
+            valid = false;
+          } else if (!validateEmail(email)) {
+            showError('form-email-error', t.formErrorEmail || 'Please enter a valid email address.');
+            setInputError(emailInput, true);
+            valid = false;
+          }
+          if (!message) {
+            showError('form-message-error', t.formErrorRequired || 'This field is required.');
+            setInputError(messageInput, true);
+            valid = false;
+          }
+          if (!valid) return;
+          alert(t.formSuccess || 'Message sent (demo). We will get in touch soon!');
+          contactForm.reset();
+        });
+      }
+
+      var hoverMedia = window.matchMedia('(hover: hover) and (pointer: fine)');
+      if (hoverMedia.matches) {
+        document.querySelectorAll('.skill-card').forEach(function(card) {
+          card.addEventListener('mousemove', function(e) {
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var rotateY = ((x / rect.width) - 0.5) * 8;
+            var rotateX = (0.5 - (y / rect.height)) * 8;
+            card.style.setProperty('--mx', Math.round((x / rect.width) * 100) + '%');
+            card.style.setProperty('--my', Math.round((y / rect.height) * 100) + '%');
+            card.style.transform = 'perspective(900px) rotateX(' + rotateX.toFixed(2) + 'deg) rotateY(' + rotateY.toFixed(2) + 'deg) translateY(-5px)';
+          });
+          card.addEventListener('mouseleave', function() {
+            card.style.transform = '';
+          });
+        });
+      }
+
+      var langCurrent = document.getElementById('lang-current');
+      var langDropdown = document.querySelector('.lang-dropdown');
+      if (langCurrent && langDropdown) {
+        langCurrent.addEventListener('click', function(e) {
+          e.stopPropagation();
+          langDropdown.classList.toggle('open');
+          langCurrent.setAttribute('aria-expanded', langDropdown.classList.contains('open'));
+        });
+      }
+      document.querySelectorAll('.lang-option').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          setLang(btn.getAttribute('data-lang'));
+        });
+      });
+      document.addEventListener('click', function() {
+        if (langDropdown) langDropdown.classList.remove('open');
+        if (langCurrent) langCurrent.setAttribute('aria-expanded', 'false');
+      });
+
+      setLang(getLang());
+
+      var sections = document.querySelectorAll('.section.enter');
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+      sections.forEach(function(s) { observer.observe(s); });
+    })();
+  </script>
+
+  <div id="ai-chat-widget">
+    <button type="button" id="ai-chat-toggle" aria-label="Open chat">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+    </button>
+    <div id="ai-chat-window">
+      <div class="ai-chat-header">
+        <span id="chat-title">Личный помощник Евгения</span>
+        <button type="button" class="ai-chat-close" aria-label="Close" onclick="closeChat()">&times;</button>
+      </div>
+      <div class="ai-chat-messages" id="chat-messages"></div>
+      <div class="ai-chat-input">
+        <input type="text" id="user-message" placeholder="Напишите сообщение..." maxlength="2000" />
+        <button type="button" id="send-btn" aria-label="Send" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <style>
+    #ai-chat-widget { --chat-primary: #00FFF0; position: fixed; bottom: 20px; right: 20px; z-index: 99999; font-family: 'Inter', system-ui, sans-serif; }
+    #ai-chat-toggle { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #00FFF0, #00B8AA); border: none; cursor: pointer; box-shadow: 0 4px 20px rgba(0,255,240,0.35); display: flex; align-items: center; justify-content: center; transition: transform 0.2s, box-shadow 0.2s; }
+    #ai-chat-toggle:hover { transform: scale(1.05); box-shadow: 0 6px 24px rgba(0,255,240,0.45); }
+    #ai-chat-toggle svg { width: 26px; height: 26px; fill: #0a0a0a; }
+    #ai-chat-window { position: absolute; bottom: 72px; right: 0; width: 360px; max-width: calc(100vw - 40px); height: 480px; background: #121212; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 8px 40px rgba(0,0,0,0.5); display: none; flex-direction: column; overflow: hidden; }
+    #ai-chat-window.open { display: flex; }
+    .ai-chat-header { background: linear-gradient(135deg, #00FFF0, #00B8AA); color: #0a0a0a; padding: 14px 16px; font-weight: 600; font-size: 0.9375rem; display: flex; justify-content: space-between; align-items: center; }
+    .ai-chat-close { background: none; border: none; color: #0a0a0a; cursor: pointer; font-size: 22px; line-height: 1; padding: 0 4px; }
+    .ai-chat-messages { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+    .ai-message { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
+    .ai-message.user { background: rgba(0,255,240,0.2); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .ai-message.assistant { background: rgba(255,255,255,0.08); color: #e5e5e5; align-self: flex-start; border-bottom-left-radius: 4px; }
+    .ai-message.error { background: rgba(220,38,38,0.2); color: #fca5a5; font-size: 12px; }
+    .ai-chat-input { padding: 12px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; gap: 8px; }
+    .ai-chat-input input { flex: 1; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; background: rgba(255,255,255,0.04); color: #fff; outline: none; font-size: 14px; }
+    .ai-chat-input input::placeholder { color: rgba(255,255,255,0.4); }
+    .ai-chat-input input:focus { border-color: #00FFF0; }
+    .ai-chat-input button { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #00FFF0, #00B8AA); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .ai-chat-input button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .ai-chat-input button svg { fill: #0a0a0a; }
+    .ai-typing { display: flex; gap: 4px; padding: 10px 14px; background: rgba(255,255,255,0.08); border-radius: 14px; border-bottom-left-radius: 4px; width: fit-content; }
+    .ai-typing span { width: 6px; height: 6px; background: #00B8AA; border-radius: 50%; animation: chat-typing 1.2s infinite; }
+    .ai-typing span:nth-child(2) { animation-delay: 0.15s; }
+    .ai-typing span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes chat-typing { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+  </style>
+  <script>
+    (function() {
+      var chatConfig = { apiUrl: '/api/chat', welcomeMessage: 'Здравствуйте! Я личный помощник Евгения. Могу рассказать об услугах, ценах и как с ним связаться. О чем спросить?' };
+      var win = document.getElementById('ai-chat-window');
+      var messagesEl = document.getElementById('chat-messages');
+      var inputEl = document.getElementById('user-message');
+      var sendBtn = document.getElementById('send-btn');
+
+      window.toggleChat = function() {
+        win.classList.toggle('open');
+        if (win.classList.contains('open') && messagesEl.children.length === 0) {
+          addMsg(chatConfig.welcomeMessage, 'assistant');
+        }
+      };
+      window.closeChat = function() { win.classList.remove('open'); };
+      document.getElementById('ai-chat-toggle').addEventListener('click', toggleChat);
+      inputEl.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendMessage(); });
+
+      function addMsg(text, role) {
+        var div = document.createElement('div');
+        div.className = 'ai-message ' + role;
+        div.textContent = text;
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+      function addTyping() {
+        var div = document.createElement('div');
+        div.className = 'ai-typing';
+        div.id = 'typing-' + Date.now();
+        div.innerHTML = '<span></span><span></span><span></span>';
+        messagesEl.appendChild(div);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return div.id;
+      }
+      function removeTyping(id) { var el = document.getElementById(id); if (el) el.remove(); }
+
+      window.sendMessage = async function() {
+        var message = inputEl.value.trim();
+        if (!message) return;
+        addMsg(message, 'user');
+        inputEl.value = '';
+        sendBtn.disabled = true;
+        var typingId = addTyping();
+        try {
+          var res = await fetch(chatConfig.apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ message: message }) });
+          removeTyping(typingId);
+          if (!res.ok) {
+            var err = await res.json();
+            throw new Error(err.error || 'Ошибка запроса');
+          }
+          var data = await res.json();
+          addMsg(data.response, 'assistant');
+        } catch (err) {
+          removeTyping(typingId);
+          var errMsg = (err && err.message) ? err.message : 'Ошибка соединения';
+          if (errMsg.indexOf('OPENAI_API_KEY') !== -1) {
+            addMsg('Бот не настроен: на сервере не задан ключ OpenAI. Напишите Евгению в Telegram: t.me/E_Berest', 'error');
+          } else if (errMsg.indexOf('MiniMax') !== -1 || errMsg.indexOf('OpenAI') !== -1) {
+            addMsg('Ошибка бота: ' + errMsg + '. Напишите Евгению: t.me/E_Berest', 'error');
+          } else {
+            addMsg('Сейчас не могу ответить. Напишите Евгению в Telegram: t.me/E_Berest', 'error');
+          }
+        }
+        sendBtn.disabled = false;
+      };
+    })();
+  </script>
+</body>
+</html>
